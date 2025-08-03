@@ -382,15 +382,16 @@
   gap: var(--space-1);
 }
 
-.param-section h4::before {
-  content: '⚙️';
-  font-size: 1.25rem;
+.param-section h4 {
+  border-left: 3px solid var(--color-brand);
+  padding-left: var(--space-2);
 }
 
 .param-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
 }
 
 .param-field {
@@ -523,6 +524,13 @@
 
 .intent-header {
   margin-bottom: var(--space-3);
+}
+
+.table-description {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: var(--space-2) 0;
+  line-height: 1.4;
 }
 
 .volume-status {
@@ -661,6 +669,8 @@
 .input-with-unit .unit {
   position: absolute;
   right: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
   font-size: 0.75rem;
   color: var(--color-text-muted);
   font-weight: 500;

@@ -37,7 +37,10 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
   return (
     <div className="intent-grid">
       <div className="intent-header">
-        <h4>📞 Call Type Configuration</h4>
+        <h4>Call Type Configuration</h4>
+        <p className="table-description">
+          Configure call types by volume percentage, average duration, AI automation rates (launch vs month 3), and revenue impact per prevented abandonment.
+        </p>
         <div className={`volume-status ${isValidShare ? 'valid' : 'invalid'}`}>
           <span>Total Volume: {(totalVolumeShare * 100).toFixed(1)}%</span>
           {!isValidShare && <span className="error-text">Must equal 100%</span>}
@@ -82,7 +85,6 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                   />
                   <span className="unit">%</span>
                 </div>
-                <div className="field-help">Share of total calls</div>
               </div>
               
               <div className="col-duration">
@@ -97,7 +99,6 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                   />
                   <span className="unit">min</span>
                 </div>
-                <div className="field-help">Average call length</div>
               </div>
               
               <div className="col-automation">
@@ -133,7 +134,6 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                     </div>
                   </div>
                 </div>
-                <div className="field-help">% handled by AI</div>
               </div>
               
               <div className="col-revenue">
@@ -149,7 +149,6 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                   />
                   <span className="unit">£</span>
                 </div>
-                <div className="field-help">Revenue lost per abandoned call</div>
               </div>
               
               <div className="col-actions">

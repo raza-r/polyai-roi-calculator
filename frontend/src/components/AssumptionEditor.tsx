@@ -17,7 +17,7 @@ const AssumptionEditor: React.FC<AssumptionEditorProps> = ({ inputs, onChange })
     <div className="assumption-editor">
       {/* Business Scale */}
       <div className="param-section">
-        <h4>📊 Business Scale</h4>
+        <h4>Business Scale</h4>
         <div className="param-grid">
           <div className="param-field">
             <label>Annual Call Volume</label>
@@ -38,7 +38,7 @@ const AssumptionEditor: React.FC<AssumptionEditorProps> = ({ inputs, onChange })
 
       {/* Cost Structure */}
       <div className="param-section">
-        <h4>💰 Cost Structure</h4>
+        <h4>Cost Structure</h4>
         <div className="param-grid">
           <div className="param-field">
             <label>Agent Cost per Minute</label>
@@ -74,7 +74,7 @@ const AssumptionEditor: React.FC<AssumptionEditorProps> = ({ inputs, onChange })
 
       {/* Operational Settings */}
       <div className="param-section">
-        <h4>⚙️ Operational Settings</h4>
+        <h4>Operational Settings</h4>
         <div className="param-grid">
           <div className="param-field checkbox-field">
             <label className="checkbox-label">

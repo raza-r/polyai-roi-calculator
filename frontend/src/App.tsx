@@ -68,9 +68,15 @@ function App() {
       const result = await calculateROI(inputs);
       setResults(result);
       
-      // Commercial hooks - show CTAs for strong ROI cases
+      // Commercial hooks - show CTAs for strong ROI cases (once per session)
       if (result.payback_months && result.payback_months <= 12 && result.roi_5y > 2.0) {
-        setTimeout(() => setShowScheduleDemo(true), 2000); // Show after 2 seconds
+        const hasShownDemo = sessionStorage.getItem('polyai-demo-shown');
+        if (!hasShownDemo) {
+          setTimeout(() => {
+            setShowScheduleDemo(true);
+            sessionStorage.setItem('polyai-demo-shown', 'true');
+          }, 2000);
+        }
       }
     } catch (err) {
       setError('Failed to calculate ROI. Please check your inputs.');
@@ -89,15 +95,15 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="container">
-          <h1>🚀 PolyAI ROI Calculator</h1>
+          <h1>PolyAI ROI Calculator</h1>
           <div className="header-subtitle">
             <p className="value-prop">
-              <strong>Discover Your Voice AI Business Case</strong> - See how industry leaders achieve <span className="highlight">200%+ ROI</span> with PolyAI
+              Build a comprehensive business case for Voice AI implementation with industry-specific analysis and benchmarking.
             </p>
             <div className="trust-indicators">
-              <span className="trust-badge">✓ Used by Fortune 500</span>
-              <span className="trust-badge">✓ 15-min Analysis</span>
-              <span className="trust-badge">✓ Based on Real Data</span>
+              <span className="trust-badge">Enterprise Analysis</span>
+              <span className="trust-badge">Industry Benchmarks</span>
+              <span className="trust-badge">Financial Modeling</span>
             </div>
           </div>
         </div>
@@ -154,16 +160,16 @@ function App() {
         <div className="modal-overlay" onClick={() => setShowScheduleDemo(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>🎯 Your ROI looks incredible!</h3>
+              <h3>Strong Business Case Identified</h3>
               <button className="modal-close" onClick={() => setShowScheduleDemo(false)}>×</button>
             </div>
             <div className="modal-body">
-              <p>Based on your analysis, you could see <strong>payback in {results?.payback_months?.toFixed(1)} months</strong> with <strong>{results?.roi_5y ? (results.roi_5y * 100).toFixed(0) : 0}% ROI</strong>.</p>
-              <p>Let's discuss how companies like yours are achieving these results with PolyAI.</p>
+              <p>Your analysis shows <strong>payback in {results?.payback_months?.toFixed(1)} months</strong> with <strong>{results?.roi_5y ? (results.roi_5y * 100).toFixed(0) : 0}% ROI</strong>.</p>
+              <p>Schedule a consultation to review implementation approach and validation.</p>
               <div className="modal-actions">
                 <a href="https://calendly.com/polyai-demo" target="_blank" rel="noopener noreferrer" 
                    className="btn-primary modal-cta">
-                  📅 Schedule 15-min Demo
+                  Schedule Consultation
                 </a>
                 <button className="btn-secondary" onClick={() => setShowScheduleDemo(false)}>
                   Maybe Later
@@ -178,16 +184,16 @@ function App() {
         <div className="modal-overlay" onClick={() => setShowLeadModal(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>📊 Get Your Custom ROI Report</h3>
+              <h3>Detailed Analysis Report</h3>
               <button className="modal-close" onClick={() => setShowLeadModal(false)}>×</button>
             </div>
             <div className="modal-body">
-              <p>Enter your email to receive a detailed ROI analysis and benchmark data from similar companies.</p>
+              <p>Enter your email to receive a comprehensive ROI analysis with industry benchmarks.</p>
               <form onSubmit={(e) => { e.preventDefault(); alert('Thanks! Check your email for the report.'); setShowLeadModal(false); }}>
                 <input type="email" placeholder="your.email@company.com" className="form-input" required />
                 <div className="modal-actions">
                   <button type="submit" className="btn-primary modal-cta">
-                    📧 Send My Report
+                    Send Report
                   </button>
                   <button type="button" className="btn-secondary" onClick={() => setShowLeadModal(false)}>
                     Cancel
