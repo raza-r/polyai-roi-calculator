@@ -107,13 +107,13 @@ Both servers successfully running:
 
 ### Terminal 1 (Backend)
 ```bash
-cd /Users/raza/polyai-roi-calculator/backend
+cd backend
 python3 -m uvicorn app.main_test:app --port 8000 --reload
 ```
 
 ### Terminal 2 (Frontend)
 ```bash
-cd /Users/raza/polyai-roi-calculator/frontend  
+cd frontend  
 npm run dev -- --host 0.0.0.0
 ```
 
@@ -139,4 +139,4 @@ Open: http://localhost:5173/
 - ✅ Documentation comprehensive
 - ✅ Local development environment ready
 
-**Repository**: https://github.com/raza-r/polyai-roi-calculator.git
+**Repository**: Available on GitHub
