@@ -144,66 +144,179 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading, detailedV
 
         {/* Charts */}
         <div className="charts-grid">
-        <div className="chart-container">
-          <h4>Time to Value</h4>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={costOverTimeData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-stroke)" />
-              <XAxis dataKey="year" fontSize={12} />
-              <YAxis tickFormatter={(value) => `£${(value/1000).toFixed(0)}k`} fontSize={12} />
-              <Tooltip formatter={(value: number) => formatCurrency(value)} />
-              <Legend />
-              <Line type="monotone" dataKey="baseline" stroke="var(--color-danger)" strokeWidth={2} name="Current Cost" />
-              <Line type="monotone" dataKey="ai" stroke="var(--color-brand)" strokeWidth={2} name="With Voice AI" />
-              <Line type="monotone" dataKey="savings" stroke="var(--color-success)" strokeWidth={2} name="Net Savings" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+          <div className="chart-container">
+            <h4>📈 Time to Value</h4>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={costOverTimeData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="2 2" stroke="#E5E7EB" strokeOpacity={0.3} />
+                <XAxis 
+                  dataKey="year" 
+                  fontSize={11}
+                  tick={{ fill: '#6B7280' }}
+                  axisLine={{ stroke: '#E5E7EB' }}
+                />
+                <YAxis 
+                  tickFormatter={(value) => `£${(value/1000).toFixed(0)}k`} 
+                  fontSize={11}
+                  tick={{ fill: '#6B7280' }}
+                  axisLine={{ stroke: '#E5E7EB' }}
+                />
+                <Tooltip 
+                  formatter={(value: number) => [formatCurrency(value), '']}
+                  labelStyle={{ color: '#374151', fontWeight: 600 }}
+                  contentStyle={{ 
+                    backgroundColor: 'white', 
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Legend 
+                  wrapperStyle={{ paddingTop: '20px' }}
+                  iconType="line"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="baseline" 
+                  stroke="#EF4444" 
+                  strokeWidth={3}
+                  name="Current Cost"
+                  dot={{ fill: '#EF4444', r: 5 }}
+                  activeDot={{ r: 7, stroke: '#EF4444', strokeWidth: 2 }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="ai" 
+                  stroke="#4F46E5" 
+                  strokeWidth={3}
+                  name="With Voice AI"
+                  dot={{ fill: '#4F46E5', r: 5 }}
+                  activeDot={{ r: 7, stroke: '#4F46E5', strokeWidth: 2 }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="savings" 
+                  stroke="#10B981" 
+                  strokeWidth={3}
+                  name="Net Savings"
+                  dot={{ fill: '#10B981', r: 5 }}
+                  activeDot={{ r: 7, stroke: '#10B981', strokeWidth: 2 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
 
-        <div className="chart-container">
-          <h4>Operating Impact (Year 1)</h4>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={minutesFunnelData} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-stroke)" />
-              <XAxis type="number" tickFormatter={(value) => `${(value/1000).toFixed(0)}k`} fontSize={12} />
-              <YAxis type="category" dataKey="name" width={120} fontSize={12} />
-              <Tooltip formatter={(value: number) => `${value.toLocaleString()} mins`} />
-              <Bar dataKey="value" fill="var(--color-brand)" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+          <div className="chart-container">
+            <h4>⚙️ Operating Impact (Year 1)</h4>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={minutesFunnelData} layout="horizontal" margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="2 2" stroke="#E5E7EB" strokeOpacity={0.3} />
+                <XAxis 
+                  type="number" 
+                  tickFormatter={(value) => `${(value/1000).toFixed(0)}k`} 
+                  fontSize={11}
+                  tick={{ fill: '#6B7280' }}
+                  axisLine={{ stroke: '#E5E7EB' }}
+                />
+                <YAxis 
+                  type="category" 
+                  dataKey="name" 
+                  width={130} 
+                  fontSize={11}
+                  tick={{ fill: '#6B7280' }}
+                  axisLine={{ stroke: '#E5E7EB' }}
+                />
+                <Tooltip 
+                  formatter={(value: number) => [`${value.toLocaleString()} mins`, '']}
+                  labelStyle={{ color: '#374151', fontWeight: 600 }}
+                  contentStyle={{ 
+                    backgroundColor: 'white', 
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Bar 
+                  dataKey="value" 
+                  fill="#4F46E5"
+                  radius={[0, 4, 4, 0]}
+                  stroke="#4F46E5"
+                  strokeWidth={1}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
-        <div className="chart-container">
-          <h4>Risk Sensitivity</h4>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={tornadoData} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-stroke)" />
-              <XAxis type="number" tickFormatter={(value) => `£${(value/1000).toFixed(0)}k`} fontSize={12} />
-              <YAxis type="category" dataKey="driver" width={120} fontSize={12} />
-              <Tooltip formatter={(value: number) => formatCurrency(value)} />
-              <Bar dataKey="impact" fill="var(--color-warning)" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+          <div className="chart-container">
+            <h4>⚡ Risk Sensitivity</h4>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={tornadoData} layout="horizontal" margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="2 2" stroke="#E5E7EB" strokeOpacity={0.3} />
+                <XAxis 
+                  type="number" 
+                  tickFormatter={(value) => `£${(value/1000).toFixed(0)}k`} 
+                  fontSize={11}
+                  tick={{ fill: '#6B7280' }}
+                  axisLine={{ stroke: '#E5E7EB' }}
+                />
+                <YAxis 
+                  type="category" 
+                  dataKey="driver" 
+                  width={130} 
+                  fontSize={11}
+                  tick={{ fill: '#6B7280' }}
+                  axisLine={{ stroke: '#E5E7EB' }}
+                />
+                <Tooltip 
+                  formatter={(value: number) => [formatCurrency(value), '']}
+                  labelStyle={{ color: '#374151', fontWeight: 600 }}
+                  contentStyle={{ 
+                    backgroundColor: 'white', 
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Bar 
+                  dataKey="impact" 
+                  fill="#F59E0B"
+                  radius={[0, 4, 4, 0]}
+                  stroke="#F59E0B"
+                  strokeWidth={1}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
-        <div className="chart-container">
-          <h4>Scenario Analysis</h4>
-          <div className="scenario-table">
-            <div className="scenario-row">
-              <span>Pessimistic Case</span>
-              <span>{formatCurrency(results.p10_p50_p90.p10)}</span>
-            </div>
-            <div className="scenario-row base">
-              <span>Base Case</span>
-              <span>{formatCurrency(results.p10_p50_p90.p50)}</span>
-            </div>
-            <div className="scenario-row">
-              <span>Optimistic Case</span>
-              <span>{formatCurrency(results.p10_p50_p90.p90)}</span>
+          <div className="chart-container">
+            <h4>🎯 Scenario Analysis</h4>
+            <div className="scenario-analysis">
+              <div className="scenario-bars">
+                <div className="scenario-bar pessimistic">
+                  <div className="scenario-header">
+                    <span className="scenario-icon">📉</span>
+                    <span className="scenario-label">Pessimistic</span>
+                  </div>
+                  <div className="scenario-value">{formatCurrency(results.p10_p50_p90.p10)}</div>
+                </div>
+                <div className="scenario-bar base">
+                  <div className="scenario-header">
+                    <span className="scenario-icon">🎯</span>
+                    <span className="scenario-label">Base Case</span>
+                  </div>
+                  <div className="scenario-value">{formatCurrency(results.p10_p50_p90.p50)}</div>
+                </div>
+                <div className="scenario-bar optimistic">
+                  <div className="scenario-header">
+                    <span className="scenario-icon">📈</span>
+                    <span className="scenario-label">Optimistic</span>
+                  </div>
+                  <div className="scenario-value">{formatCurrency(results.p10_p50_p90.p90)}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div> {/* End detailed-content */}
     </div>
   );
