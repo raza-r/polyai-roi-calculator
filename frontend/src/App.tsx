@@ -41,6 +41,7 @@ function App() {
   const [results, setResults] = useState<Results | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [detailedView, setDetailedView] = useState(false);
 
   // Throttled calculation
   useEffect(() => {
@@ -87,29 +88,56 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Voice AI ROI Calculator</h1>
-        <p className="disclaimer">
-          Illustrative analysis - not official pricing. All assumptions are editable.
-        </p>
+        <div className="container">
+          <h1>Calculate your Voice AI ROI</h1>
+          <p className="disclaimer">
+            Build your business case with real PolyAI customer data. All assumptions are customizable.
+          </p>
+        </div>
       </header>
 
-      <div className="app-content">
+      <div className={`app-content ${detailedView ? 'detailed-view' : ''}`}>
         <div className="input-section">
-          <TemplatePicker onTemplateLoad={handleTemplateLoad} />
-          <AssumptionEditor inputs={inputs} onChange={setInputs} />
-          <IntentGrid inputs={inputs} onChange={setInputs} />
+          <div className="input-step">
+            <div className="step-header">
+              <div className="step-number">1</div>
+              <h3 className="step-title">Choose Your Starting Point</h3>
+            </div>
+            <TemplatePicker onTemplateLoad={handleTemplateLoad} />
+          </div>
+
+          <div className="input-step">
+            <div className="step-header">
+              <div className="step-number">2</div>
+              <h3 className="step-title">Set Your Parameters</h3>
+            </div>
+            <AssumptionEditor inputs={inputs} onChange={setInputs} />
+          </div>
+
+          <div className="input-step">
+            <div className="step-header">
+              <div className="step-number">3</div>
+              <h3 className="step-title">Configure Call Types</h3>
+            </div>
+            <IntentGrid inputs={inputs} onChange={setInputs} />
+          </div>
           
           {error && (
             <div className="error-message">
-              {error}
+              <strong>Configuration Error:</strong> {error}
             </div>
           )}
         </div>
 
         <div className="results-section">
-          <ResultsPanel results={results} loading={loading} />
+          <ResultsPanel 
+            results={results} 
+            loading={loading} 
+            detailedView={detailedView}
+            onToggleView={() => setDetailedView(!detailedView)}
+          />
           
-          {results && (
+          {results && detailedView && (
             <>
               <ExportButtons 
                 inputs={inputs} 

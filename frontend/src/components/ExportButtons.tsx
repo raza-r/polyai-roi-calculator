@@ -55,35 +55,35 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({ inputs, disabled = false 
 
   return (
     <div className="export-buttons">
-      <h4>Export Results</h4>
-      <div className="button-group">
+      <h3 className="mb-3">Share your business case</h3>
+      <div className="grid grid-3">
         <button
           onClick={() => handleExport('xlsx')}
           disabled={disabled || loading === 'xlsx'}
-          className="export-btn xlsx"
+          className="btn btn-secondary"
         >
-          {loading === 'xlsx' ? 'Exporting...' : 'Export XLSX'}
+          {loading === 'xlsx' ? 'Exporting...' : 'Excel Analysis'}
         </button>
         
         <button
           onClick={() => handleExport('pdf')}
           disabled={disabled || loading === 'pdf'}
-          className="export-btn pdf"
+          className="btn btn-secondary"
         >
-          {loading === 'pdf' ? 'Exporting...' : 'Export PDF'}
+          {loading === 'pdf' ? 'Exporting...' : 'Executive Report'}
         </button>
         
         <button
           onClick={() => handleExport('csv')}
           disabled={disabled || loading === 'csv'}
-          className="export-btn csv"
+          className="btn btn-secondary"
         >
-          {loading === 'csv' ? 'Exporting...' : 'Export CSV'}
+          {loading === 'csv' ? 'Exporting...' : 'Raw Data'}
         </button>
       </div>
       
       {disabled && (
-        <p className="export-note">Complete the configuration to enable exports</p>
+        <p className="text-muted text-center mt-3">Complete your configuration to enable exports</p>
       )}
     </div>
   );

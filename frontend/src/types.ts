@@ -57,4 +57,4 @@ export interface Results {
   yearly: YearResult[];
 }
 
-export type VerticalTemplate = 'retail' | 'fs' | 'telco' | 'hospitality';
+export type VerticalTemplate = 'utilities' | 'restaurants' | 'financial_services' | 'healthcare' | 'travel' | 'retail' | 'contact_center';

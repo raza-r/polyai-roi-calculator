@@ -15,7 +15,7 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
 
   const addIntent = () => {
     const newIntent: IntentRow = {
-      name: 'New Intent',
+      name: 'New Call Type',
       volume_share: 0.1,
       avg_minutes: 3.0,
       containment_m0: 0.5,
@@ -37,9 +37,9 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
   return (
     <div className="intent-grid">
       <div className="intent-header">
-        <h3>Intent Configuration</h3>
+        <p className="text-muted mb-3">Break down your call volume by type and expected AI performance</p>
         <div className={`volume-total ${isValidShare ? 'valid' : 'invalid'}`}>
-          Total Volume Share: {(totalVolumeShare * 100).toFixed(1)}%
+          <span className="text-accent">Total Volume Share: {(totalVolumeShare * 100).toFixed(1)}%</span>
           {!isValidShare && <span className="error"> (Must equal 100%)</span>}
         </div>
       </div>

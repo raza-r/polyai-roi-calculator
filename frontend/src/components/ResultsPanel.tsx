@@ -5,15 +5,58 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart
 interface ResultsPanelProps {
   results: Results | null;
   loading: boolean;
+  detailedView: boolean;
+  onToggleView: () => void;
 }
 
-const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading }) => {
+const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading, detailedView, onToggleView }) => {
   if (loading) {
-    return <div className="results-panel loading">Calculating...</div>;
+    return (
+      <div className={`results-panel loading ${detailedView ? 'detailed' : 'compact'}`}>
+        <div className="results-header">
+          <h2>Calculating...</h2>
+          <p className="results-subtitle">Processing your scenario</p>
+        </div>
+      </div>
+    );
   }
 
   if (!results) {
-    return <div className="results-panel empty">Configure inputs to see results</div>;
+    return (
+      <div className={`results-panel ${detailedView ? 'detailed' : 'compact'}`}>
+        <div className="results-header">
+          <h2>Ready to calculate</h2>
+          <p className="results-subtitle">Select a template or adjust parameters</p>
+        </div>
+        <div className="key-metrics">
+          <div className="metric-card">
+            <div className="metric-value">—</div>
+            <div className="metric-label">5-Year Value</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-value">—</div>
+            <div className="metric-label">Payback</div>
+          </div>
+          {detailedView && (
+            <>
+              <div className="metric-card">
+                <div className="metric-value">—</div>
+                <div className="metric-label">5-Year NPV</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-value">—</div>
+                <div className="metric-label">5-Year ROI</div>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="view-toggle">
+          <button className="view-toggle-btn" onClick={onToggleView}>
+            {detailedView ? '← Compact View' : 'Explore Details →'}
+          </button>
+        </div>
+      </div>
+    );
   }
 
   const formatCurrency = (value: number) => `£${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
@@ -40,47 +83,67 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading }) => {
   }));
 
   return (
-    <div className="results-panel">
-      {/* KPI Strip */}
-      <div className="kpi-strip">
-        <div className="kpi-card">
-          <h4>5Y Total Value</h4>
-          <div className="kpi-value">{formatCurrency(results.yearly.reduce((sum, yr) => sum + yr.total_value, 0))}</div>
-        </div>
-        
-        <div className="kpi-card">
-          <h4>Payback</h4>
-          <div className="kpi-value">
-            {results.payback_months ? `${results.payback_months.toFixed(1)} months` : 'No payback'}
-          </div>
-        </div>
-        
-        <div className="kpi-card">
-          <h4>5Y NPV</h4>
-          <div className="kpi-value">{formatCurrency(results.npv_5y)}</div>
-        </div>
-        
-        <div className="kpi-card">
-          <h4>5Y ROI</h4>
-          <div className="kpi-value">{formatPercent(results.roi_5y)}</div>
-        </div>
+    <div className={`results-panel ${detailedView ? 'detailed' : 'compact'}`}>
+      <div className="results-header">
+        <h2>{detailedView ? 'Voice AI Impact Analysis' : 'Your ROI Summary'}</h2>
+        <p className="results-subtitle">
+          {detailedView ? 'Comprehensive financial analysis' : 'Key metrics at a glance'}
+        </p>
       </div>
 
-      {/* Value Split */}
-      <div className="value-split">
-        <h4>Value Breakdown</h4>
-        <div className="split-bars">
-          <div className="split-bar ops" style={{ width: `${results.ops_vs_revenue_split.ops_savings}%` }}>
-            Ops Savings: {formatPercent(results.ops_vs_revenue_split.ops_savings)}
-          </div>
-          <div className="split-bar revenue" style={{ width: `${results.ops_vs_revenue_split.revenue_retained}%` }}>
-            Revenue Retained: {formatPercent(results.ops_vs_revenue_split.revenue_retained)}
-          </div>
+      {/* Key Metrics - Responsive to View Mode */}
+      <div className="key-metrics">
+        <div className="metric-card">
+          <div className="metric-value">{formatCurrency(results.yearly.reduce((sum, yr) => sum + yr.total_value, 0))}</div>
+          <div className="metric-label">5-Year Value</div>
         </div>
+        
+        <div className="metric-card">
+          <div className="metric-value">
+            {results.payback_months ? `${results.payback_months.toFixed(1)}` : '∞'}
+          </div>
+          <div className="metric-label">Payback (Mo)</div>
+        </div>
+        
+        {detailedView && (
+          <>
+            <div className="metric-card">
+              <div className="metric-value">{formatCurrency(results.npv_5y)}</div>
+              <div className="metric-label">5-Year NPV</div>
+            </div>
+            
+            <div className="metric-card">
+              <div className="metric-value">{formatPercent(results.roi_5y)}</div>
+              <div className="metric-label">5-Year ROI</div>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Charts */}
-      <div className="charts-grid">
+      {/* View Toggle Button */}
+      <div className="view-toggle">
+        <button className="view-toggle-btn" onClick={onToggleView}>
+          {detailedView ? '← Compact View' : 'Explore Details →'}
+        </button>
+      </div>
+
+      {/* Detailed Content - Only shown in detailed view */}
+      <div className="detailed-content">
+        {/* Value Split */}
+        <div className="value-split">
+          <h4>Value Breakdown</h4>
+          <div className="split-bars">
+            <div className="split-bar ops" style={{ width: `${results.ops_vs_revenue_split.ops_savings}%` }}>
+              Ops Savings: {formatPercent(results.ops_vs_revenue_split.ops_savings)}
+            </div>
+            <div className="split-bar revenue" style={{ width: `${results.ops_vs_revenue_split.revenue_retained}%` }}>
+              Revenue Retained: {formatPercent(results.ops_vs_revenue_split.revenue_retained)}
+            </div>
+          </div>
+        </div>
+
+        {/* Charts */}
+        <div className="charts-grid">
         <div className="chart-container">
           <h4>Cost Over Time</h4>
           <ResponsiveContainer width="100%" height={250}>
@@ -141,6 +204,7 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading }) => {
           </div>
         </div>
       </div>
+      </div> {/* End detailed-content */}
     </div>
   );
 };
