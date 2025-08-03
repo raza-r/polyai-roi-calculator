@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { DealInputs, Results, VerticalTemplate } from './types';
 
-const API_BASE = 'http://localhost:8000';
+// Use environment variable for API base URL, fallback to localhost for development
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -25,18 +26,13 @@ export const getTemplate = async (vertical: VerticalTemplate): Promise<DealInput
   return response.data;
 };
 
-export const exportXLSX = async (inputs: DealInputs): Promise<Blob> => {
-  const response = await api.post('/api/export/xlsx', inputs, {
-    responseType: 'blob',
-  });
-  return response.data;
+// Temporarily disable XLSX and PDF exports until dependencies are fixed
+export const exportXLSX = async (_inputs: DealInputs): Promise<Blob> => {
+  throw new Error('Excel export temporarily unavailable. Use CSV export instead.');
 };
 
-export const exportPDF = async (inputs: DealInputs): Promise<Blob> => {
-  const response = await api.post('/api/export/pdf', inputs, {
-    responseType: 'blob',
-  });
-  return response.data;
+export const exportPDF = async (_inputs: DealInputs): Promise<Blob> => {
+  throw new Error('PDF export temporarily unavailable. Use CSV export instead.');
 };
 
 export const exportCSV = async (inputs: DealInputs): Promise<Blob> => {

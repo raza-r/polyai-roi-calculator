@@ -4,6 +4,8 @@ from fastapi.responses import Response
 from .models import DealInputs, Results, VerticalTemplate
 from .calc_engine import ROICalculator
 from .templates import get_template
+import csv
+import io
 # from .exports import ExcelExporter, PDFExporter, CSVExporter  # Temporarily disabled due to WeasyPrint dependency
 
 app = FastAPI(title="PolyAI ROI Calculator API", version="1.0.0")
@@ -112,23 +114,74 @@ async def get_template_data(vertical: VerticalTemplate):
 #         raise HTTPException(status_code=500, detail=str(e))
 
 
-# @app.post("/api/export/csv")
-# async def export_csv(inputs: DealInputs):
-#     """Export results as CSV file"""
-#     try:
-#         calculator = ROICalculator(inputs)
-#         results = calculator.calculate()
-#         
-#         exporter = CSVExporter()
-#         csv_content = exporter.create_csv(inputs, results)
-#         
-#         return Response(
-#             content=csv_content,
-#             media_type="text/csv",
-#             headers={"Content-Disposition": "attachment; filename=roi_data.csv"}
-#         )
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))
+@app.post("/api/export/csv")
+async def export_csv(inputs: DealInputs):
+    """Export results as CSV file"""
+    try:
+        calculator = ROICalculator(inputs)
+        results = calculator.calculate()
+        
+        # Create CSV content
+        output = io.StringIO()
+        writer = csv.writer(output)
+        
+        # Header
+        writer.writerow(['PolyAI ROI Calculator - Results'])
+        writer.writerow([])
+        
+        # Summary metrics
+        writer.writerow(['Summary Metrics'])
+        writer.writerow(['5-Year Total Value', f"£{results.yearly[-1].cumulative_value:,.0f}"])
+        writer.writerow(['5-Year NPV', f"£{results.npv_5y:,.0f}"])
+        writer.writerow(['5-Year ROI', f"{results.roi_5y:.1%}"])
+        if results.payback_months:
+            writer.writerow(['Payback Period', f"{results.payback_months:.1f} months"])
+        writer.writerow([])
+        
+        # Yearly breakdown
+        writer.writerow(['Yearly Breakdown'])
+        writer.writerow(['Year', 'Baseline Cost', 'AI Cost', 'Savings', 'Revenue Retained', 'Total Value'])
+        for yr in results.yearly:
+            writer.writerow([
+                f"Year {yr.year + 1}",
+                f"£{yr.baseline_cost:,.0f}",
+                f"£{yr.ai_cost:,.0f}",
+                f"£{yr.ops_savings:,.0f}",
+                f"£{yr.revenue_retained:,.0f}",
+                f"£{yr.total_value:,.0f}"
+            ])
+        writer.writerow([])
+        
+        # Input assumptions
+        writer.writerow(['Input Assumptions'])
+        writer.writerow(['Annual Calls', inputs.annual_calls])
+        writer.writerow(['Agent Cost per Minute', f"£{inputs.agent_cost_per_min}"])
+        writer.writerow(['PolyAI Cost per Minute', f"£{inputs.polyai_cost_per_min}"])
+        writer.writerow(['Volume Growth', f"{inputs.volume_growth:.1%}"])
+        writer.writerow(['Discount Rate', f"{inputs.discount_rate:.1%}"])
+        writer.writerow([])
+        
+        # Intent breakdown
+        writer.writerow(['Intent Configuration'])
+        writer.writerow(['Intent', 'Volume %', 'Avg Minutes', 'Containment M0', 'Containment M3'])
+        for intent in inputs.intents:
+            writer.writerow([
+                intent.name,
+                f"{intent.volume_share:.1%}",
+                intent.avg_minutes,
+                f"{intent.containment_m0:.1%}",
+                f"{intent.containment_m3:.1%}"
+            ])
+        
+        csv_content = output.getvalue()
+        
+        return Response(
+            content=csv_content,
+            media_type="text/csv",
+            headers={"Content-Disposition": "attachment; filename=roi_analysis.csv"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":

@@ -40,14 +40,19 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({ inputs, disabled = false 
           break;
         case 'csv':
           blob = await exportCSV(inputs);
-          filename = 'roi_data.csv';
+          filename = 'roi_analysis.csv';
           break;
       }
 
       downloadBlob(blob, filename);
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Failed to export ${type}:`, error);
-      alert(`Failed to export ${type.toUpperCase()}. Please try again.`);
+      // Show more helpful error messages
+      if (error.message.includes('temporarily unavailable')) {
+        alert(`${error.message}\n\nCSV export is available as an alternative.`);
+      } else {
+        alert(`Failed to export ${type.toUpperCase()}. Please try again.`);
+      }
     } finally {
       setLoading(null);
     }
@@ -61,6 +66,7 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({ inputs, disabled = false 
           onClick={() => handleExport('xlsx')}
           disabled={disabled || loading === 'xlsx'}
           className="btn btn-secondary"
+          title="Excel export temporarily unavailable - use CSV instead"
         >
           {loading === 'xlsx' ? 'Exporting...' : 'Excel Analysis'}
         </button>
@@ -69,6 +75,7 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({ inputs, disabled = false 
           onClick={() => handleExport('pdf')}
           disabled={disabled || loading === 'pdf'}
           className="btn btn-secondary"
+          title="PDF export temporarily unavailable - use CSV instead"
         >
           {loading === 'pdf' ? 'Exporting...' : 'Executive Report'}
         </button>
@@ -77,14 +84,19 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({ inputs, disabled = false 
           onClick={() => handleExport('csv')}
           disabled={disabled || loading === 'csv'}
           className="btn btn-secondary"
+          title="Download comprehensive CSV report"
         >
-          {loading === 'csv' ? 'Exporting...' : 'Raw Data'}
+          {loading === 'csv' ? 'Exporting...' : '📊 CSV Report'}
         </button>
       </div>
       
       {disabled && (
         <p className="text-muted text-center mt-3">Complete your configuration to enable exports</p>
       )}
+      
+      <p className="text-muted text-center mt-2 text-sm">
+        💡 CSV export includes summary metrics, yearly breakdown, and input assumptions
+      </p>
     </div>
   );
 };
