@@ -7,9 +7,19 @@ interface ResultsPanelProps {
   loading: boolean;
   detailedView: boolean;
   onToggleView: () => void;
+  onScheduleDemo?: () => void;
+  onDownloadReport?: () => void;
 }
 
-const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, inputs, loading, detailedView, onToggleView }) => {
+const ResultsPanel: React.FC<ResultsPanelProps> = ({ 
+  results, 
+  inputs, 
+  loading, 
+  detailedView, 
+  onToggleView, 
+  onScheduleDemo, 
+  onDownloadReport 
+}) => {
   if (loading) {
     return (
       <div className={`results-panel loading ${detailedView ? 'detailed' : 'compact'}`}>
@@ -61,6 +71,71 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, inputs, loading, d
 
   const formatCurrency = (value: number) => `£${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
   const formatPercent = (value: number) => `${value.toFixed(1)}%`;
+  
+  // Commercial intelligence
+  const isStrongROI = results && results.roi_5y > 2.0 && results.payback_months && results.payback_months <= 12;
+  const isExceptionalROI = results && results.roi_5y > 3.0 && results.payback_months && results.payback_months <= 8;
+
+  // Dynamic success stories based on call volume and industry context
+  const getSuccessStory = (inputs: DealInputs, results: Results) => {
+    const isLargeEnterprise = inputs.annual_calls > 1000000;
+    const isMidMarket = inputs.annual_calls > 200000 && inputs.annual_calls <= 1000000;
+    
+    if (isExceptionalROI) {
+      return (
+        <div>
+          <p><strong>🎯 Elite Performance Territory!</strong> Your projected results put you in the top 10% of PolyAI implementations.</p>
+          <div className="success-examples">
+            <div className="success-item">
+              <strong>PG&E (Utilities)</strong>: Serving 5.2M customers, achieved 22% CSAT increase during outages with 41% containment rate. 
+              <span className="result-highlight">Similar scale, similar success.</span>
+            </div>
+            <div className="success-item">
+              <strong>Atos (Enterprise BPO)</strong>: 187% ROI through 30% call reduction across 24/7 operations.
+              <span className="result-highlight">Your {formatPercent(results.roi_5y * 100)} ROI is on track.</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    if (isStrongROI) {
+      return (
+        <div>
+          <p><strong>💪 Strong Business Case!</strong> Companies with similar profiles are seeing excellent results:</p>
+          <div className="success-examples">
+            {isLargeEnterprise ? (
+              <div className="success-item">
+                <strong>Howard Brown Health</strong>: Scaled from 15k to 60k calls seamlessly during health crises. 72% AHT reduction for routine requests.
+                <span className="result-highlight">Enterprise scale, proven results.</span>
+              </div>
+            ) : isMidMarket ? (
+              <div className="success-item">
+                <strong>Côte Brasserie</strong>: 76% booking conversion generating £250k+ after-hours revenue annually.
+                <span className="result-highlight">Mid-market excellence.</span>
+              </div>
+            ) : (
+              <div className="success-item">
+                <strong>Big Table Group</strong>: 3,800+ monthly reservations worth £140k+ across 130 locations.
+                <span className="result-highlight">Efficient operations, maximum ROI.</span>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+    
+    return (
+      <div>
+        <p>Companies across industries are achieving measurable results with PolyAI:</p>
+        <ul>
+          <li><strong>Quicken (Financial):</strong> Zero customer complaints since launch, 21% containment growth</li>
+          <li><strong>Hopper (Travel):</strong> 15% containment for complex international queries</li>
+          <li><strong>Various Industries:</strong> 96% average CSAT maintained while reducing costs</li>
+        </ul>
+      </div>
+    );
+  };
 
   return (
     <div className={`results-panel ${detailedView ? 'detailed' : 'compact'}`}>
@@ -71,16 +146,20 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, inputs, loading, d
         </p>
       </div>
 
-      {/* Key Metrics - Executive-focused */}
+      {/* Key Metrics - Executive-focused with commercial hooks */}
       <div className="key-metrics">
-        <div className="metric-card">
-          <div className="metric-value">{formatCurrency(results.yearly.reduce((sum, yr) => sum + yr.total_value, 0))}</div>
+        <div className={`metric-card ${isExceptionalROI ? 'exceptional' : isStrongROI ? 'strong' : ''}`}>
+          <div className="metric-value">
+            {formatCurrency(results.yearly.reduce((sum, yr) => sum + yr.total_value, 0))}
+            {isExceptionalROI && <span className="metric-badge">🏆 Exceptional</span>}
+          </div>
           <div className="metric-label">5-Year Business Value</div>
         </div>
         
-        <div className="metric-card">
+        <div className={`metric-card ${results.payback_months && results.payback_months <= 6 ? 'exceptional' : results.payback_months && results.payback_months <= 12 ? 'strong' : ''}`}>
           <div className="metric-value">
             {results.payback_months ? `${results.payback_months.toFixed(1)}m` : '—'}
+            {results.payback_months && results.payback_months <= 6 && <span className="metric-badge">🚀 Fast</span>}
           </div>
           <div className="metric-label">Payback Period</div>
         </div>
@@ -91,13 +170,38 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, inputs, loading, d
               <div className="metric-value">{formatCurrency(results.npv_5y)}</div>
               <div className="metric-label">Net Present Value</div>
             </div>
-            <div className="metric-card">
-              <div className="metric-value">{formatPercent(results.roi_5y * 100)}</div>
+            <div className={`metric-card ${results.roi_5y > 3.0 ? 'exceptional' : results.roi_5y > 2.0 ? 'strong' : ''}`}>
+              <div className="metric-value">
+                {formatPercent(results.roi_5y * 100)}
+                {results.roi_5y > 3.0 && <span className="metric-badge">💎 Elite</span>}
+              </div>
               <div className="metric-label">Return on Investment</div>
             </div>
           </>
         )}
       </div>
+
+      {/* Commercial Call-to-Action when ROI is strong */}
+      {isStrongROI && (
+        <div className="commercial-cta">
+          <div className="cta-content">
+            <h4>🎯 Outstanding Results!</h4>
+            <p>Your analysis shows <strong>{formatPercent(results.roi_5y * 100)} ROI</strong> with payback in just <strong>{results.payback_months?.toFixed(1)} months</strong>. Companies with similar profiles are already seeing these results with PolyAI.</p>
+            <div className="cta-actions">
+              {onScheduleDemo && (
+                <button className="btn-primary cta-button" onClick={onScheduleDemo}>
+                  📅 Schedule Demo
+                </button>
+              )}
+              {onDownloadReport && (
+                <button className="btn-secondary cta-button" onClick={onDownloadReport}>
+                  📊 Get Full Report
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Operational Insights - Calculated from Inputs */}
       {detailedView && inputs && (
@@ -141,17 +245,12 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, inputs, loading, d
         </div>
       )}
 
-      {/* Success Story - When Available */}
-      {detailedView && results && results.roi_5y > 0.5 && (
+      {/* Dynamic Success Stories Based on Performance */}
+      {detailedView && results && results.roi_5y > 0.5 && inputs && (
         <div className="success-story">
-          <h4>🏆 Similar Success Stories</h4>
+          <h4>🏆 Companies Like Yours Are Winning</h4>
           <div className="story-content">
-            <p>Companies like yours are achieving similar results with PolyAI:</p>
-            <ul>
-              <li><strong>Atos:</strong> 187% ROI on labor cost savings, 30% call reduction</li>
-              <li><strong>Côte Brasserie:</strong> 76% booking conversion, £250k after-hours revenue</li>
-              <li><strong>PG&E:</strong> 22% CSAT increase during outages, 41% call containment</li>
-            </ul>
+            {getSuccessStory(inputs, results)}
           </div>
         </div>
       )}

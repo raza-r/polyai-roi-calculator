@@ -4,18 +4,18 @@ from fastapi.responses import Response
 from .models import DealInputs, Results, VerticalTemplate
 from .calc_engine import ROICalculator
 from .templates import get_template
+from functools import lru_cache
 import csv
 import io
-# from .exports import ExcelExporter, PDFExporter, CSVExporter  # Temporarily disabled due to WeasyPrint dependency
 
 app = FastAPI(title="PolyAI ROI Calculator API", version="1.0.0")
 
-# CORS middleware
+# CORS middleware - Allow all origins for demo deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],  # Vite dev server
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=["*"],  # Allow all origins for easy deployment
+    allow_credentials=False,  # Set to False when using allow_origins=["*"]
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -67,11 +67,16 @@ async def get_templates():
     }
 
 
+@lru_cache(maxsize=10)
+def get_cached_template(vertical: VerticalTemplate) -> DealInputs:
+    """Cached template lookup for performance"""
+    return get_template(vertical)
+
 @app.get("/api/templates/{vertical}", response_model=DealInputs)
 async def get_template_data(vertical: VerticalTemplate):
     """Get template data for specific vertical"""
     try:
-        return get_template(vertical)
+        return get_cached_template(vertical)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

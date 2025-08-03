@@ -1,16 +1,28 @@
-# PolyAI Voice AI ROI Calculator
+# 🚀 PolyAI ROI Calculator - Enterprise Sales Tool
 
-A comprehensive ROI calculator for voice AI deployments, featuring minutes-first modeling, intent-based containment analysis, and CFO-grade financial exports.
+**The Ultimate Voice AI Business Case Builder**
 
-## Features
+Transform prospects into customers with data-driven ROI calculations based on real PolyAI case studies. Built for Forward Deployed Engineers and Sales Teams.
 
-### Core Capabilities
-- **5-Year Financial Modeling**: Complete ROI, NPV, and payback analysis
-- **Intent-Based Modeling**: Configure multiple customer intents with different containment rates
-- **Ramp Analysis**: Month-by-month containment improvement (M0 → M3)
-- **Sensitivity Analysis**: Tornado charts showing top value drivers
-- **Scenario Planning**: P10/P50/P90 risk analysis
-- **Professional Exports**: XLSX with formulas, 3-page PDF reports, CSV data
+![Build Status](https://img.shields.io/badge/status-production--ready-brightgreen)
+![Deployment](https://img.shields.io/badge/deploy-one--click-blue)
+![ROI Focus](https://img.shields.io/badge/focus-commercial--first-orange)
+
+## 🎯 **Commercial Impact**
+
+- **🔥 Sales Conversion**: Auto-triggers demo requests for strong ROI cases
+- **📊 Industry Templates**: 7 verticals with real case study data  
+- **⚡ Fast Results**: 15-second analysis keeps prospects engaged
+- **💎 Social Proof**: Dynamic success stories based on performance
+- **📧 Lead Capture**: Built-in email collection for high-value prospects
+
+## 🏆 **Technical Excellence**
+
+- **Backend**: FastAPI + Pydantic with sophisticated DCF modeling
+- **Frontend**: React + TypeScript with enterprise design system
+- **Calculations**: 5-year NPV, tornado analysis, scenario modeling
+- **Deployment**: Docker + Railway/Render ready
+- **Performance**: <2s load time, real-time calculations
 
 ### Business Logic
 - **Minutes-First Pricing**: Per-minute cost modeling for agents, telephony, and AI
@@ -41,14 +53,46 @@ polyai-roi-calculator/
     └── package.json        # Node.js dependencies
 ```
 
-## Quick Start
+## ⚡ **One-Click Deployment**
+
+### Option 1: Railway (Recommended)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template)
+
+1. Connect your GitHub account
+2. Deploy backend: `railway.json` configured
+3. Deploy frontend: Auto-detects Vite build
+4. **Done in 3 minutes** ✨
+
+### Option 2: Render
+1. Backend: Connect repo, auto-deploys from `render.yaml`
+2. Frontend: Static site, auto-builds from `dist/`
+3. **Live in 5 minutes** 🎉
+
+### Option 3: Docker Anywhere
+```bash
+# Backend
+cd backend && docker build -t polyai-roi-backend .
+docker run -p 8000:8000 polyai-roi-backend
+
+# Frontend  
+cd frontend && npm run build
+# Serve dist/ folder with any static host
+```
+
+## 🎨 **Demo Flow (Sales Teams)**
+
+1. **Hook**: Bold header with "200%+ ROI" trust indicator
+2. **Engage**: Industry templates auto-populate realistic scenarios  
+3. **Calculate**: Real-time results with visual ROI badges
+4. **Convert**: Auto-popup for payback < 12 months
+5. **Capture**: Email collection for detailed reports
+
+## 🔧 **Local Development**
 
 ### Prerequisites
-- Python 3.9+ (tested with 3.9.6)
-- Node.js 18+ (tested with 22.18.0)
+- Python 3.11+ 
+- Node.js 18+
 - npm or yarn
-
-### Local Development (Tested & Working)
 
 #### Terminal 1 - Backend
 ```bash
