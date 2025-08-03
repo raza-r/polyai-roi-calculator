@@ -142,13 +142,15 @@ class ROICalculator:
         return None  # No payback within 3 years
     
     def _calculate_roi_5y(self, yearly_results: List[YearResult]) -> float:
-        total_investment = sum(yr.ai_cost for yr in yearly_results)
-        total_savings = sum(yr.ops_savings + yr.revenue_retained for yr in yearly_results)
+        # Use cost reduction approach: savings as % of baseline costs
+        total_baseline = sum(yr.baseline_cost for yr in yearly_results)
+        total_ai = sum(yr.ai_cost for yr in yearly_results)
         
-        if total_investment == 0:
+        if total_baseline == 0:
             return 0.0
         
-        return ((total_savings - total_investment) / total_investment) * 100
+        # ROI = Cost Reduction Percentage
+        return ((total_baseline - total_ai) / total_baseline) * 100
     
     def _calculate_ops_vs_revenue_split(self, yearly_results: List[YearResult]) -> Dict[str, float]:
         total_ops = sum(yr.ops_savings for yr in yearly_results)
