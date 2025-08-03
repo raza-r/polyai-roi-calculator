@@ -1,14 +1,15 @@
 import React from 'react';
-import type { Results } from '../types';
+import type { Results, DealInputs } from '../types';
 
 interface ResultsPanelProps {
   results: Results | null;
+  inputs: DealInputs | null;
   loading: boolean;
   detailedView: boolean;
   onToggleView: () => void;
 }
 
-const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading, detailedView, onToggleView }) => {
+const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, inputs, loading, detailedView, onToggleView }) => {
   if (loading) {
     return (
       <div className={`results-panel loading ${detailedView ? 'detailed' : 'compact'}`}>
@@ -97,6 +98,63 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading, detailedV
           </>
         )}
       </div>
+
+      {/* Operational Insights - Calculated from Inputs */}
+      {detailedView && inputs && (
+        <div className="operational-insights">
+          <h4>🎯 Key Operational Benefits</h4>
+          <div className="insights-grid">
+            <div className="insight-card">
+              <div className="insight-icon">👥</div>
+              <div className="insight-content">
+                <h5>Agent Productivity</h5>
+                <div className="insight-metrics">
+                  <div className="metric-row">
+                    <span>Hours saved per agent/month:</span>
+                    <span className="metric-value">{Math.round((results.yearly[0].automated_minutes / 60) / 12).toLocaleString()}</span>
+                  </div>
+                  <div className="metric-row">
+                    <span>Focus on complex work:</span>
+                    <span className="metric-value">{formatPercent((results.yearly[0].human_minutes / results.yearly[0].baseline_minutes) * 100)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="insight-card">
+              <div className="insight-icon">🕒</div>
+              <div className="insight-content">
+                <h5>24/7 Availability</h5>
+                <div className="insight-metrics">
+                  <div className="metric-row">
+                    <span>After-hours coverage:</span>
+                    <span className="metric-value">{inputs.business_hours_only ? 'No' : '24/7'}</span>
+                  </div>
+                  <div className="metric-row">
+                    <span>Revenue protection:</span>
+                    <span className="metric-value">{formatCurrency(results.yearly[0].revenue_retained)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Story - When Available */}
+      {detailedView && results && results.roi_5y > 0.5 && (
+        <div className="success-story">
+          <h4>🏆 Similar Success Stories</h4>
+          <div className="story-content">
+            <p>Companies like yours are achieving similar results with PolyAI:</p>
+            <ul>
+              <li><strong>Atos:</strong> 187% ROI on labor cost savings, 30% call reduction</li>
+              <li><strong>Côte Brasserie:</strong> 76% booking conversion, £250k after-hours revenue</li>
+              <li><strong>PG&E:</strong> 22% CSAT increase during outages, 41% call containment</li>
+            </ul>
+          </div>
+        </div>
+      )}
 
       <div className="view-toggle">
         <button className="view-toggle-btn" onClick={onToggleView}>

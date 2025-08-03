@@ -37,6 +37,7 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
   return (
     <div className="intent-grid">
       <div className="intent-header">
+        <h4>📞 Call Type Configuration</h4>
         <div className={`volume-status ${isValidShare ? 'valid' : 'invalid'}`}>
           <span>Total Volume: {(totalVolumeShare * 100).toFixed(1)}%</span>
           {!isValidShare && <span className="error-text">Must equal 100%</span>}
@@ -49,11 +50,9 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
           <div className="table-header">
             <div className="col-name">Call Type</div>
             <div className="col-volume">Volume %</div>
-            <div className="col-duration">Avg Duration</div>
-            <div className="col-containment">AI Launch</div>
-            <div className="col-containment">AI Month 3</div>
-            <div className="col-handoff">Handoff Time</div>
-            <div className="col-revenue">Revenue/Abandon</div>
+            <div className="col-duration">Duration</div>
+            <div className="col-automation">AI Automation</div>
+            <div className="col-revenue">Revenue Protection</div>
             <div className="col-actions">Actions</div>
           </div>
 
@@ -66,7 +65,7 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                   value={intent.name}
                   onChange={(e) => updateIntent(index, 'name', e.target.value)}
                   className="name-input"
-                  placeholder="Call type name"
+                  placeholder="e.g., Reservations, Support, Sales"
                 />
               </div>
               
@@ -83,6 +82,7 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                   />
                   <span className="unit">%</span>
                 </div>
+                <div className="field-help">Share of total calls</div>
               </div>
               
               <div className="col-duration">
@@ -97,50 +97,43 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                   />
                   <span className="unit">min</span>
                 </div>
+                <div className="field-help">Average call length</div>
               </div>
               
-              <div className="col-containment">
-                <div className="input-with-unit">
-                  <input
-                    type="number"
-                    value={(intent.containment_m0 * 100).toFixed(0)}
-                    onChange={(e) => updateIntent(index, 'containment_m0', (parseFloat(e.target.value) || 0) / 100)}
-                    min="0"
-                    max="100"
-                    step="1"
-                    className="table-input"
-                  />
-                  <span className="unit">%</span>
+              <div className="col-automation">
+                <div className="automation-inputs">
+                  <div className="automation-row">
+                    <label>Launch:</label>
+                    <div className="input-with-unit">
+                      <input
+                        type="number"
+                        value={(intent.containment_m0 * 100).toFixed(0)}
+                        onChange={(e) => updateIntent(index, 'containment_m0', (parseFloat(e.target.value) || 0) / 100)}
+                        min="0"
+                        max="100"
+                        step="1"
+                        className="table-input small"
+                      />
+                      <span className="unit">%</span>
+                    </div>
+                  </div>
+                  <div className="automation-row">
+                    <label>Month 3:</label>
+                    <div className="input-with-unit">
+                      <input
+                        type="number"
+                        value={(intent.containment_m3 * 100).toFixed(0)}
+                        onChange={(e) => updateIntent(index, 'containment_m3', (parseFloat(e.target.value) || 0) / 100)}
+                        min="0"
+                        max="100"
+                        step="1"
+                        className="table-input small"
+                      />
+                      <span className="unit">%</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="col-containment">
-                <div className="input-with-unit">
-                  <input
-                    type="number"
-                    value={(intent.containment_m3 * 100).toFixed(0)}
-                    onChange={(e) => updateIntent(index, 'containment_m3', (parseFloat(e.target.value) || 0) / 100)}
-                    min="0"
-                    max="100"
-                    step="1"
-                    className="table-input"
-                  />
-                  <span className="unit">%</span>
-                </div>
-              </div>
-              
-              <div className="col-handoff">
-                <div className="input-with-unit">
-                  <input
-                    type="number"
-                    value={intent.handoff_minutes}
-                    onChange={(e) => updateIntent(index, 'handoff_minutes', parseFloat(e.target.value) || 0)}
-                    min="0"
-                    step="0.1"
-                    className="table-input"
-                  />
-                  <span className="unit">min</span>
-                </div>
+                <div className="field-help">% handled by AI</div>
               </div>
               
               <div className="col-revenue">
@@ -156,6 +149,7 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                   />
                   <span className="unit">£</span>
                 </div>
+                <div className="field-help">Revenue lost per abandoned call</div>
               </div>
               
               <div className="col-actions">

@@ -45,49 +45,49 @@ const TemplatePicker: React.FC<TemplatePickerProps> = ({ onTemplateLoad }) => {
 
   if (!templates) return <div className="loading-state">Loading templates...</div>;
 
-  // Professional sector configurations with emojis and client-ready copy
+  // Executive-focused sector configurations with business outcomes and ROI focus
   const sectorConfig: Record<string, { emoji: string; title: string; description: string; proof: string }> = {
     utilities: {
       emoji: '⚡',
-      title: 'Utilities',
-      description: 'Automate outage reporting and status updates at scale.',
-      proof: 'Deployed for a national utility; 4M+ calls/year handled by Voice AI.'
+      title: 'Utilities & Energy',
+      description: 'Protect revenue during outages, reduce customer churn, and scale support during crisis events.',
+      proof: 'PG&E: 22% CSAT increase during outages, 41% call containment, handles 4M+ calls yearly'
     },
     restaurants: {
       emoji: '🍽️',
-      title: 'Restaurants',
-      description: 'Deflect reservation, hours, and order-status calls with natural language.',
-      proof: '>50% containment on peak weekends.'
+      title: 'Restaurants & Hospitality',
+      description: 'Capture after-hours bookings, reduce no-shows, and increase table utilization.',
+      proof: 'Côte Brasserie: £250k after-hours revenue, 76% booking conversion, 24/7 availability'
     },
     financial_services: {
       emoji: '💳',
       title: 'Financial Services',
-      description: 'Authenticate, service balances, and route complex issues securely.',
-      proof: 'Reduce average handling time by 20–30%.'
+      description: 'Reduce compliance costs, improve customer satisfaction, and scale during peak periods.',
+      proof: 'Quicken: 21% containment growth, zero customer complaints, significant agent efficiency gains'
     },
     healthcare: {
       emoji: '🏥',
       title: 'Healthcare',
-      description: 'Scheduling, reminders, and triage with HIPAA-ready workflows.',
-      proof: 'Lower no-shows by 10–15% with proactive outreach.'
+      description: 'Reduce no-shows, improve patient outcomes, and scale support during health crises.',
+      proof: 'Howard Brown: 30% containment, 72% AHT reduction, seamless crisis scaling capability'
     },
     travel: {
       emoji: '✈️',
-      title: 'Travel',
-      description: 'Handle bookings, cancellations, and travel disruptions seamlessly.',
-      proof: 'Process 80%+ routine inquiries without agent intervention.'
+      title: 'Travel & Tourism',
+      description: 'Handle booking disruptions, reduce customer frustration, and provide 24/7 global support.',
+      proof: 'Hopper: 15% containment, 24/7 support across 100+ countries, immediate resolution'
     },
     retail: {
       emoji: '🛍️',
-      title: 'Retail',
-      description: 'Support order tracking, returns, and product inquiries at scale.',
-      proof: 'Reduce call center volume by 40% during peak seasons.'
+      title: 'Retail & E-commerce',
+      description: 'Increase sales conversion, reduce cart abandonment, and improve customer experience.',
+      proof: 'Big Table Group: £140k monthly revenue, 3,800+ reservations, 100% call answer rate'
     },
     contact_center: {
       emoji: '📞',
-      title: 'Contact Center',
-      description: 'Generic contact center operations with flexible call routing.',
-      proof: 'Typical enterprise deployment with multi-intent handling.'
+      title: 'Contact Centers',
+      description: 'Reduce operational costs, improve agent satisfaction, and scale without hiring.',
+      proof: 'Atos: 30% call reduction, 187% ROI on labor savings, improved agent well-being'
     }
   };
 
@@ -98,11 +98,11 @@ const TemplatePicker: React.FC<TemplatePickerProps> = ({ onTemplateLoad }) => {
         {/* Start from Scratch Option */}
         <div className="simple-template-card" onClick={() => handleCardClick('custom')}>
           <div className="template-icon">⚙️</div>
-          <h4>Start from Scratch</h4>
+          <h4>Custom Business Case</h4>
           <p>Build your own scenario</p>
           {selectedTemplate === 'custom' && showDetails && (
             <div className="template-details">
-              <p className="detail-text">Perfect for unique business models. Set all parameters yourself with complete control over assumptions.</p>
+              <p className="detail-text">Perfect for unique business models or when you want complete control over your assumptions. Set all parameters to match your specific operational requirements.</p>
               <button 
                 className="select-button" 
                 onClick={(e) => { e.stopPropagation(); handleTemplateSelect('retail' as VerticalTemplate); }}
@@ -149,7 +149,7 @@ const TemplatePicker: React.FC<TemplatePickerProps> = ({ onTemplateLoad }) => {
       </div>
       
       {!showDetails && (
-        <p className="help-text">Click any option above to see details and select</p>
+        <p className="help-text">Select your industry to see relevant case studies and business outcomes</p>
       )}
     </div>
   );

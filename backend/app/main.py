@@ -47,13 +47,13 @@ async def get_templates():
     return {
         "verticals": [v.value for v in VerticalTemplate],
         "descriptions": {
-            "utilities": "PG&E: 41% containment, 22% CSAT boost, handles 4M+ calls during outages",
-            "restaurants": "Côte Brasserie: 76% booking conversion, £250k after-hours revenue, 24/7 availability",
-            "financial_services": "Quicken: 21% containment growth, 0 customer complaints, agent efficiency boost",
-            "healthcare": "Howard Brown: 30% containment, 72% AHT reduction, crisis scaling capability",
-            "travel": "Hopper: 15% containment, 24/7 support, complex travel queries resolved",
-            "retail": "Big Table Group: £140k monthly revenue, 3,800+ reservations, 100% call answer rate",
-            "contact_center": "Atos: 30% call reduction, 187% ROI on labor savings, agent well-being improvement"
+            "utilities": "Protect revenue during outages, reduce customer churn, and scale support during crisis events",
+            "restaurants": "Capture after-hours bookings, reduce no-shows, and increase table utilization",
+            "financial_services": "Reduce compliance costs, improve customer satisfaction, and scale during peak periods",
+            "healthcare": "Reduce no-shows, improve patient outcomes, and scale support during health crises",
+            "travel": "Handle booking disruptions, reduce customer frustration, and provide 24/7 global support",
+            "retail": "Increase sales conversion, reduce cart abandonment, and improve customer experience",
+            "contact_center": "Reduce operational costs, improve agent satisfaction, and scale without hiring"
         },
         "case_studies": {
             "utilities": "PG&E serves 5.2M households with PolyAI handling 4M+ calls yearly. 22% CSAT increase during outages, 25% customer effort reduction.",

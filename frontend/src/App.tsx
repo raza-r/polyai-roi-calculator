@@ -94,7 +94,7 @@ function App() {
           <div className="input-step">
             <div className="step-header">
               <div className="step-number">1</div>
-              <h3 className="step-title">Select Your Industry</h3>
+              <h3 className="step-title">Choose Your Industry</h3>
             </div>
             <TemplatePicker onTemplateLoad={handleTemplateLoad} />
           </div>
@@ -125,6 +125,7 @@ function App() {
         <div className="results-section">
           <ResultsPanel 
             results={results} 
+            inputs={inputs}
             loading={loading} 
             detailedView={detailedView}
             onToggleView={() => setDetailedView(!detailedView)}
