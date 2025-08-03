@@ -15,6 +15,8 @@ interface TemplateData {
 const TemplatePicker: React.FC<TemplatePickerProps> = ({ onTemplateLoad }) => {
   const [templates, setTemplates] = useState<TemplateData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     getTemplates().then(setTemplates);
@@ -32,7 +34,16 @@ const TemplatePicker: React.FC<TemplatePickerProps> = ({ onTemplateLoad }) => {
     }
   };
 
-  if (!templates) return <div>Loading templates...</div>;
+  const handleCardClick = (vertical: string) => {
+    if (selectedTemplate === vertical) {
+      setShowDetails(!showDetails);
+    } else {
+      setSelectedTemplate(vertical);
+      setShowDetails(true);
+    }
+  };
+
+  if (!templates) return <div className="loading-state">Loading templates...</div>;
 
   const formatVerticalName = (vertical: string) => {
     return vertical
@@ -43,40 +54,58 @@ const TemplatePicker: React.FC<TemplatePickerProps> = ({ onTemplateLoad }) => {
 
   return (
     <div className="template-picker">
-      <p className="template-subtitle">Jump-start with real PolyAI customer scenarios, or start from scratch</p>
-      <div className="template-grid">
+      <div className="simple-template-grid">
         {/* Start from Scratch Option */}
-        <button
-          className="template-button"
-          onClick={() => handleTemplateSelect('retail' as VerticalTemplate)} // Use retail as default
-          disabled={loading}
-        >
-          <div className="template-header">
-            <strong>Start from Scratch</strong>
-            <span className="case-study-badge" style={{ background: 'var(--color-text-muted)' }}>Custom</span>
-          </div>
-          <p className="template-description">Build your own scenario with default parameters</p>
-          <p className="case-study-detail">Perfect for unique use cases or when you want full control over assumptions</p>
-          {loading && <div className="loading-overlay">Loading...</div>}
-        </button>
+        <div className="simple-template-card" onClick={() => handleCardClick('custom')}>
+          <div className="template-icon">🎯</div>
+          <h4>Start from Scratch</h4>
+          <p>Build your own scenario</p>
+          {selectedTemplate === 'custom' && showDetails && (
+            <div className="template-details">
+              <p className="detail-text">Perfect for unique business models. Set all parameters yourself with complete control over assumptions.</p>
+              <button 
+                className="select-button" 
+                onClick={(e) => { e.stopPropagation(); handleTemplateSelect('retail' as VerticalTemplate); }}
+                disabled={loading}
+              >
+                {loading ? 'Loading...' : 'Use This Template'}
+              </button>
+            </div>
+          )}
+        </div>
 
         {templates.verticals.map((vertical) => (
-          <button
-            key={vertical}
-            className="template-button"
-            onClick={() => handleTemplateSelect(vertical as VerticalTemplate)}
-            disabled={loading}
+          <div 
+            key={vertical} 
+            className="simple-template-card"
+            onClick={() => handleCardClick(vertical)}
           >
-            <div className="template-header">
-              <strong>{formatVerticalName(vertical)}</strong>
-              <span className="case-study-badge">Live Customer</span>
-            </div>
-            <p className="template-description">{templates.descriptions[vertical]}</p>
-            <p className="case-study-detail">{templates.case_studies[vertical]}</p>
-            {loading && <div className="loading-overlay">Loading...</div>}
-          </button>
+            <div className="template-icon">🏢</div>
+            <h4>{formatVerticalName(vertical)}</h4>
+            <p>Real customer data</p>
+            {selectedTemplate === vertical && showDetails && (
+              <div className="template-details">
+                <p className="detail-text">{templates.descriptions[vertical]}</p>
+                <div className="case-study">
+                  <strong>Case Study:</strong>
+                  <p>{templates.case_studies[vertical]}</p>
+                </div>
+                <button 
+                  className="select-button" 
+                  onClick={(e) => { e.stopPropagation(); handleTemplateSelect(vertical as VerticalTemplate); }}
+                  disabled={loading}
+                >
+                  {loading ? 'Loading...' : 'Use This Template'}
+                </button>
+              </div>
+            )}
+          </div>
         ))}
       </div>
+      
+      {!showDetails && (
+        <p className="help-text">👆 Click any option above to see details and select</p>
+      )}
     </div>
   );
 };

@@ -9,194 +9,223 @@ interface AssumptionEditorProps {
 const AssumptionEditor: React.FC<AssumptionEditorProps> = ({ inputs, onChange }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const updateField = (field: keyof DealInputs, value: any) => {
+  const updateField = (field: keyof DealInputs, value: string | number | boolean) => {
     onChange({ ...inputs, [field]: value });
   };
 
   return (
     <div className="assumption-editor">
-      <p className="text-muted mb-4">Adjust these core parameters to match your contact center operations</p>
-      
-      {/* Always-on dials */}
-      <div className="grid grid-3" style={{ marginBottom: 'var(--space-5)' }}>
-        <div className="form-group">
-          <label className="form-label">Annual Calls</label>
-          <input
-            className="form-input"
-            type="number"
-            value={inputs.annual_calls}
-            onChange={(e) => updateField('annual_calls', parseInt(e.target.value))}
-            min="1000"
-            step="1000"
-          />
-        </div>
-        
-        <div className="form-group">
-          <label className="form-label">Agent Cost/Min (£)</label>
-          <input
-            className="form-input"
-            type="number"
-            value={inputs.agent_cost_per_min}
-            onChange={(e) => updateField('agent_cost_per_min', parseFloat(e.target.value))}
-            min="0.1"
-            step="0.1"
-          />
-        </div>
-        
-        <div className="form-group">
-          <label className="form-label">PolyAI Cost/Min (£)</label>
-          <input
-            className="form-input"
-            type="number"
-            value={inputs.polyai_cost_per_min}
-            onChange={(e) => updateField('polyai_cost_per_min', parseFloat(e.target.value))}
-            min="0.01"
-            step="0.01"
-          />
+      {/* Core Parameters */}
+      <div className="param-section">
+        <h4>Essential Parameters</h4>
+        <div className="param-grid">
+          <div className="param-field">
+            <label>Annual Call Volume</label>
+            <div className="input-with-unit">
+              <input
+                type="number"
+                value={inputs.annual_calls}
+                onChange={(e) => updateField('annual_calls', parseInt(e.target.value) || 0)}
+                min="1000"
+                step="1000"
+              />
+              <span className="unit">calls</span>
+            </div>
+          </div>
+          
+          <div className="param-field">
+            <label>Agent Cost per Minute</label>
+            <div className="input-with-unit">
+              <input
+                type="number"
+                value={inputs.agent_cost_per_min}
+                onChange={(e) => updateField('agent_cost_per_min', parseFloat(e.target.value) || 0)}
+                min="0.1"
+                step="0.1"
+              />
+              <span className="unit">£</span>
+            </div>
+          </div>
+          
+          <div className="param-field">
+            <label>Voice AI Cost per Minute</label>
+            <div className="input-with-unit">
+              <input
+                type="number"
+                value={inputs.polyai_cost_per_min}
+                onChange={(e) => updateField('polyai_cost_per_min', parseFloat(e.target.value) || 0)}
+                min="0.01"
+                step="0.01"
+              />
+              <span className="unit">£</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Advanced accordion */}
-      <div className="advanced-section">
+      {/* Advanced Parameters Toggle */}
+      <div className="advanced-toggle">
         <button 
-          className="btn btn-secondary btn-sm"
+          className="toggle-button"
           onClick={() => setShowAdvanced(!showAdvanced)}
-          style={{ marginBottom: showAdvanced ? 'var(--space-4)' : '0' }}
         >
-          <span className="text-accent">Advanced Parameters</span>
-          {showAdvanced ? ' ▼' : ' ▶'}
+          <span>Advanced Settings</span>
+          <span className={`toggle-icon ${showAdvanced ? 'expanded' : ''}`}>
+            ▼
+          </span>
         </button>
-        
-        {showAdvanced && (
-          <div className="grid grid-2">
-            <div className="form-group">
-              <label className="form-label">Telco Cost/Min (£)</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.telco_cost_per_min}
-                onChange={(e) => updateField('telco_cost_per_min', parseFloat(e.target.value))}
-                min="0"
-                step="0.01"
-              />
+      </div>
+      
+      {showAdvanced && (
+        <div className="param-section advanced">
+          <div className="param-grid">
+            <div className="param-field">
+              <label>Telephony Cost per Minute</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={inputs.telco_cost_per_min}
+                  onChange={(e) => updateField('telco_cost_per_min', parseFloat(e.target.value) || 0)}
+                  min="0"
+                  step="0.01"
+                />
+                <span className="unit">£</span>
+              </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">ACW Minutes</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.acw_minutes}
-                onChange={(e) => updateField('acw_minutes', parseFloat(e.target.value))}
-                min="0"
-                step="0.1"
-              />
+            <div className="param-field">
+              <label>After Call Work Time</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={inputs.acw_minutes}
+                  onChange={(e) => updateField('acw_minutes', parseFloat(e.target.value) || 0)}
+                  min="0"
+                  step="0.1"
+                />
+                <span className="unit">min</span>
+              </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Baseline Abandon Rate</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.baseline_abandon_rate}
-                onChange={(e) => updateField('baseline_abandon_rate', parseFloat(e.target.value))}
-                min="0"
-                max="1"
-                step="0.01"
-              />
+            <div className="param-field">
+              <label>Current Abandon Rate</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={(inputs.baseline_abandon_rate * 100).toFixed(1)}
+                  onChange={(e) => updateField('baseline_abandon_rate', (parseFloat(e.target.value) || 0) / 100)}
+                  min="0"
+                  max="100"
+                  step="0.1"
+                />
+                <span className="unit">%</span>
+              </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">AI Abandon Rate</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.ai_abandon_rate}
-                onChange={(e) => updateField('ai_abandon_rate', parseFloat(e.target.value))}
-                min="0"
-                max="1"
-                step="0.01"
-              />
+            <div className="param-field">
+              <label>AI Abandon Rate</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={(inputs.ai_abandon_rate * 100).toFixed(1)}
+                  onChange={(e) => updateField('ai_abandon_rate', (parseFloat(e.target.value) || 0) / 100)}
+                  min="0"
+                  max="100"
+                  step="0.1"
+                />
+                <span className="unit">%</span>
+              </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-checkbox">
+            <div className="param-field">
+              <label>Out of Hours Volume</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={(inputs.night_fraction * 100).toFixed(0)}
+                  onChange={(e) => updateField('night_fraction', (parseFloat(e.target.value) || 0) / 100)}
+                  min="0"
+                  max="100"
+                  step="1"
+                />
+                <span className="unit">%</span>
+              </div>
+            </div>
+            
+            <div className="param-field checkbox-field">
+              <label className="checkbox-label">
                 <input
                   type="checkbox"
                   checked={inputs.business_hours_only}
                   onChange={(e) => updateField('business_hours_only', e.target.checked)}
                 />
-                <span>Business Hours Only</span>
+                <span className="checkmark"></span>
+                Business Hours Only
               </label>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Night Fraction</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.night_fraction}
-                onChange={(e) => updateField('night_fraction', parseFloat(e.target.value))}
-                min="0"
-                max="1"
-                step="0.1"
-              />
+            <div className="param-field">
+              <label>Annual Inflation</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={(inputs.inflation * 100).toFixed(1)}
+                  onChange={(e) => updateField('inflation', (parseFloat(e.target.value) || 0) / 100)}
+                  min="0"
+                  max="20"
+                  step="0.1"
+                />
+                <span className="unit">%</span>
+              </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Inflation Rate</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.inflation}
-                onChange={(e) => updateField('inflation', parseFloat(e.target.value))}
-                min="0"
-                max="0.2"
-                step="0.01"
-              />
+            <div className="param-field">
+              <label>Volume Growth Rate</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={(inputs.volume_growth * 100).toFixed(1)}
+                  onChange={(e) => updateField('volume_growth', (parseFloat(e.target.value) || 0) / 100)}
+                  min="0"
+                  max="50"
+                  step="0.1"
+                />
+                <span className="unit">%</span>
+              </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Volume Growth Rate</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.volume_growth}
-                onChange={(e) => updateField('volume_growth', parseFloat(e.target.value))}
-                min="0"
-                max="0.5"
-                step="0.01"
-              />
+            <div className="param-field">
+              <label>Discount Rate</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={(inputs.discount_rate * 100).toFixed(1)}
+                  onChange={(e) => updateField('discount_rate', (parseFloat(e.target.value) || 0) / 100)}
+                  min="0"
+                  max="30"
+                  step="0.1"
+                />
+                <span className="unit">%</span>
+              </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Discount Rate</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.discount_rate}
-                onChange={(e) => updateField('discount_rate', parseFloat(e.target.value))}
-                min="0"
-                max="0.3"
-                step="0.01"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label className="form-label">Risk Adjustment</label>
-              <input
-                className="form-input"
-                type="number"
-                value={inputs.risk_adjustment}
-                onChange={(e) => updateField('risk_adjustment', parseFloat(e.target.value))}
-                min="0"
-                max="1"
-                step="0.01"
-              />
+            <div className="param-field">
+              <label>Risk Adjustment</label>
+              <div className="input-with-unit">
+                <input
+                  type="number"
+                  value={(inputs.risk_adjustment * 100).toFixed(1)}
+                  onChange={(e) => updateField('risk_adjustment', (parseFloat(e.target.value) || 0) / 100)}
+                  min="0"
+                  max="100"
+                  step="0.1"
+                />
+                <span className="unit">%</span>
+              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

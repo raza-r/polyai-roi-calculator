@@ -50,7 +50,7 @@ function App() {
     }, 250);
 
     return () => clearTimeout(timer);
-  }, [inputs]);
+  }, [inputs]); // calculateResults is stable, no need to include in deps
 
   const calculateResults = async () => {
     // Validate inputs
@@ -89,9 +89,9 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="container">
-          <h1>Calculate your Voice AI ROI</h1>
+          <h1>Voice AI ROI Calculator</h1>
           <p className="disclaimer">
-            Build your business case with real PolyAI customer data. All assumptions are customizable.
+            Build a compelling business case with data-driven insights. Start with proven customer scenarios or create your own custom analysis - all assumptions are fully customizable.
           </p>
         </div>
       </header>
@@ -109,7 +109,7 @@ function App() {
           <div className="input-step">
             <div className="step-header">
               <div className="step-number">2</div>
-              <h3 className="step-title">Set Your Parameters</h3>
+              <h3 className="step-title">Configure Business Parameters</h3>
             </div>
             <AssumptionEditor inputs={inputs} onChange={setInputs} />
           </div>
@@ -117,14 +117,14 @@ function App() {
           <div className="input-step">
             <div className="step-header">
               <div className="step-number">3</div>
-              <h3 className="step-title">Configure Call Types</h3>
+              <h3 className="step-title">Define Call Types & Volumes</h3>
             </div>
             <IntentGrid inputs={inputs} onChange={setInputs} />
           </div>
           
           {error && (
             <div className="error-message">
-              <strong>Configuration Error:</strong> {error}
+              <strong>Configuration Issue:</strong> {error}
             </div>
           )}
         </div>
