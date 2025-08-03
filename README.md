@@ -44,35 +44,49 @@ polyai-roi-calculator/
 ## Quick Start
 
 ### Prerequisites
-- Python 3.11+
-- Node.js 18+
+- Python 3.9+ (tested with 3.9.6)
+- Node.js 18+ (tested with 22.18.0)
 - npm or yarn
 
-### Backend Setup
+### Local Development (Tested & Working)
 
+#### Terminal 1 - Backend
 ```bash
 cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+pip3 install -r requirements.txt
+python3 -m uvicorn app.main_test:app --reload --port 8000
 ```
 
-The API will be available at http://localhost:8000
-
-### Frontend Setup
-
+#### Terminal 2 - Frontend
 ```bash
 cd frontend
-npm install
-npm run dev
+npm install  # (already completed)
+npm run dev -- --host 0.0.0.0
 ```
 
-The React app will be available at http://localhost:5173
+#### Access Application
+- **Frontend**: http://localhost:5173/
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
+
+### Known Issues & Solutions
+
+#### PDF Export Issue
+If you encounter WeasyPrint errors, use the test version:
+```bash
+python3 -m uvicorn app.main_test:app --port 8000  # No PDF export
+```
+
+#### Safari Localhost Issues
+Try these alternatives:
+- http://127.0.0.1:5173/
+- Use Chrome/Firefox instead
 
 ### Running Tests
 
 ```bash
 cd backend
-pytest tests/
+python3 -m pytest tests/test_calc_engine.py -v  # Core functionality (7/9 pass)
 ```
 
 ## API Endpoints
