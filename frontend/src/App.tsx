@@ -91,7 +91,7 @@ function App() {
         <div className="container">
           <h1>Voice AI ROI Calculator</h1>
           <p className="disclaimer">
-            Build a compelling business case with data-driven insights. Start with proven customer scenarios or create your own custom analysis - all assumptions are fully customizable.
+            Build a data-driven business case for Voice AI. Use proven scenarios or customize your own assumptions.
           </p>
         </div>
       </header>
@@ -109,7 +109,7 @@ function App() {
           <div className="input-step">
             <div className="step-header">
               <div className="step-number">2</div>
-              <h3 className="step-title">Configure Business Parameters</h3>
+              <h3 className="step-title">Business Parameters</h3>
             </div>
             <AssumptionEditor inputs={inputs} onChange={setInputs} />
           </div>
@@ -117,7 +117,7 @@ function App() {
           <div className="input-step">
             <div className="step-header">
               <div className="step-number">3</div>
-              <h3 className="step-title">Define Call Types & Volumes</h3>
+              <h3 className="step-title">Call Types & Volumes</h3>
             </div>
             <IntentGrid inputs={inputs} onChange={setInputs} />
           </div>

@@ -85,36 +85,36 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading, detailedV
   return (
     <div className={`results-panel ${detailedView ? 'detailed' : 'compact'}`}>
       <div className="results-header">
-        <h2>{detailedView ? 'Voice AI Impact Analysis' : 'Your ROI Summary'}</h2>
+        <h2>{detailedView ? 'Voice AI Impact Analysis' : 'ROI Summary'}</h2>
         <p className="results-subtitle">
           {detailedView ? 'Comprehensive financial analysis' : 'Key metrics at a glance'}
         </p>
       </div>
 
-      {/* Key Metrics - Responsive to View Mode */}
+      {/* Key Metrics - Client-focused */}
       <div className="key-metrics">
         <div className="metric-card">
           <div className="metric-value">{formatCurrency(results.yearly.reduce((sum, yr) => sum + yr.total_value, 0))}</div>
-          <div className="metric-label">5-Year Value</div>
+          <div className="metric-label">Total Value (5 Years)</div>
         </div>
         
         <div className="metric-card">
           <div className="metric-value">
             {results.payback_months ? `${results.payback_months.toFixed(1)}` : '∞'}
           </div>
-          <div className="metric-label">Payback (Mo)</div>
+          <div className="metric-label">Payback (Months)</div>
         </div>
         
         {detailedView && (
           <>
             <div className="metric-card">
               <div className="metric-value">{formatCurrency(results.npv_5y)}</div>
-              <div className="metric-label">5-Year NPV</div>
+              <div className="metric-label">Net Present Value</div>
             </div>
             
             <div className="metric-card">
               <div className="metric-value">{formatPercent(results.roi_5y)}</div>
-              <div className="metric-label">5-Year ROI</div>
+              <div className="metric-label">Return on Investment</div>
             </div>
           </>
         )}
@@ -129,15 +129,15 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading, detailedV
 
       {/* Detailed Content - Only shown in detailed view */}
       <div className="detailed-content">
-        {/* Value Split */}
+        {/* Value Composition */}
         <div className="value-split">
-          <h4>Value Breakdown</h4>
+          <h4>Where Value Comes From</h4>
           <div className="split-bars">
             <div className="split-bar ops" style={{ width: `${results.ops_vs_revenue_split.ops_savings}%` }}>
-              Ops Savings: {formatPercent(results.ops_vs_revenue_split.ops_savings)}
+              Cost Savings: {formatPercent(results.ops_vs_revenue_split.ops_savings)}
             </div>
             <div className="split-bar revenue" style={{ width: `${results.ops_vs_revenue_split.revenue_retained}%` }}>
-              Revenue Retained: {formatPercent(results.ops_vs_revenue_split.revenue_retained)}
+              Revenue Protection: {formatPercent(results.ops_vs_revenue_split.revenue_retained)}
             </div>
           </div>
         </div>
@@ -145,43 +145,43 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading, detailedV
         {/* Charts */}
         <div className="charts-grid">
         <div className="chart-container">
-          <h4>Cost Over Time</h4>
+          <h4>Time to Value</h4>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={costOverTimeData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis tickFormatter={(value) => `£${(value/1000).toFixed(0)}k`} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-stroke)" />
+              <XAxis dataKey="year" fontSize={12} />
+              <YAxis tickFormatter={(value) => `£${(value/1000).toFixed(0)}k`} fontSize={12} />
               <Tooltip formatter={(value: number) => formatCurrency(value)} />
               <Legend />
-              <Line type="monotone" dataKey="baseline" stroke="#e74c3c" name="Baseline Cost" />
-              <Line type="monotone" dataKey="ai" stroke="#3498db" name="AI Cost" />
-              <Line type="monotone" dataKey="savings" stroke="#27ae60" name="Savings" />
+              <Line type="monotone" dataKey="baseline" stroke="var(--color-danger)" strokeWidth={2} name="Current Cost" />
+              <Line type="monotone" dataKey="ai" stroke="var(--color-brand)" strokeWidth={2} name="With Voice AI" />
+              <Line type="monotone" dataKey="savings" stroke="var(--color-success)" strokeWidth={2} name="Net Savings" />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         <div className="chart-container">
-          <h4>Minutes Breakdown (Year 1)</h4>
+          <h4>Operating Impact (Year 1)</h4>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={minutesFunnelData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
-              <YAxis tickFormatter={(value) => `${(value/1000).toFixed(0)}k`} />
+            <BarChart data={minutesFunnelData} layout="horizontal">
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-stroke)" />
+              <XAxis type="number" tickFormatter={(value) => `${(value/1000).toFixed(0)}k`} fontSize={12} />
+              <YAxis type="category" dataKey="name" width={120} fontSize={12} />
               <Tooltip formatter={(value: number) => `${value.toLocaleString()} mins`} />
-              <Bar dataKey="value" fill="#3498db" />
+              <Bar dataKey="value" fill="var(--color-brand)" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         <div className="chart-container">
-          <h4>Top Sensitivity Drivers</h4>
+          <h4>Risk Sensitivity</h4>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={tornadoData} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" tickFormatter={(value) => `£${(value/1000).toFixed(0)}k`} />
-              <YAxis type="category" dataKey="driver" width={120} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-stroke)" />
+              <XAxis type="number" tickFormatter={(value) => `£${(value/1000).toFixed(0)}k`} fontSize={12} />
+              <YAxis type="category" dataKey="driver" width={120} fontSize={12} />
               <Tooltip formatter={(value: number) => formatCurrency(value)} />
-              <Bar dataKey="impact" fill="#f39c12" />
+              <Bar dataKey="impact" fill="var(--color-warning)" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -190,15 +190,15 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, loading, detailedV
           <h4>Scenario Analysis</h4>
           <div className="scenario-table">
             <div className="scenario-row">
-              <span>P10 (Pessimistic)</span>
+              <span>Pessimistic Case</span>
               <span>{formatCurrency(results.p10_p50_p90.p10)}</span>
             </div>
             <div className="scenario-row base">
-              <span>P50 (Base Case)</span>
+              <span>Base Case</span>
               <span>{formatCurrency(results.p10_p50_p90.p50)}</span>
             </div>
             <div className="scenario-row">
-              <span>P90 (Optimistic)</span>
+              <span>Optimistic Case</span>
               <span>{formatCurrency(results.p10_p50_p90.p90)}</span>
             </div>
           </div>

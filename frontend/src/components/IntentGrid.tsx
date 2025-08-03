@@ -43,31 +43,34 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
         </div>
       </div>
 
-      <div className="intent-cards">
-        {inputs.intents.map((intent, index) => (
-          <div key={index} className="intent-card">
-            <div className="intent-card-header">
-              <input
-                type="text"
-                value={intent.name}
-                onChange={(e) => updateIntent(index, 'name', e.target.value)}
-                className="intent-name-input"
-                placeholder="Call type name"
-              />
-              {inputs.intents.length > 1 && (
-                <button
-                  onClick={() => removeIntent(index)}
-                  className="remove-intent-btn"
-                  title="Remove this call type"
-                >
-                  ×
-                </button>
-              )}
-            </div>
+      <div className="intent-table-container">
+        <div className="intent-table">
+          {/* Header Row */}
+          <div className="table-header">
+            <div className="col-name">Call Type</div>
+            <div className="col-volume">Volume %</div>
+            <div className="col-duration">Avg Duration</div>
+            <div className="col-containment">AI Launch</div>
+            <div className="col-containment">AI Month 3</div>
+            <div className="col-handoff">Handoff Time</div>
+            <div className="col-revenue">Revenue/Abandon</div>
+            <div className="col-actions">Actions</div>
+          </div>
 
-            <div className="intent-fields">
-              <div className="field-group">
-                <label>Volume Share</label>
+          {/* Data Rows */}
+          {inputs.intents.map((intent, index) => (
+            <div key={index} className="table-row">
+              <div className="col-name">
+                <input
+                  type="text"
+                  value={intent.name}
+                  onChange={(e) => updateIntent(index, 'name', e.target.value)}
+                  className="name-input"
+                  placeholder="Call type name"
+                />
+              </div>
+              
+              <div className="col-volume">
                 <div className="input-with-unit">
                   <input
                     type="number"
@@ -76,13 +79,13 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                     min="0"
                     max="100"
                     step="0.1"
+                    className="table-input"
                   />
                   <span className="unit">%</span>
                 </div>
               </div>
-
-              <div className="field-group">
-                <label>Avg Duration</label>
+              
+              <div className="col-duration">
                 <div className="input-with-unit">
                   <input
                     type="number"
@@ -90,13 +93,13 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                     onChange={(e) => updateIntent(index, 'avg_minutes', parseFloat(e.target.value) || 0)}
                     min="0.1"
                     step="0.1"
+                    className="table-input"
                   />
                   <span className="unit">min</span>
                 </div>
               </div>
-
-              <div className="field-group">
-                <label>AI Success (Month 0)</label>
+              
+              <div className="col-containment">
                 <div className="input-with-unit">
                   <input
                     type="number"
@@ -105,13 +108,13 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                     min="0"
                     max="100"
                     step="1"
+                    className="table-input"
                   />
                   <span className="unit">%</span>
                 </div>
               </div>
-
-              <div className="field-group">
-                <label>AI Success (Month 3)</label>
+              
+              <div className="col-containment">
                 <div className="input-with-unit">
                   <input
                     type="number"
@@ -120,48 +123,59 @@ const IntentGrid: React.FC<IntentGridProps> = ({ inputs, onChange }) => {
                     min="0"
                     max="100"
                     step="1"
+                    className="table-input"
                   />
                   <span className="unit">%</span>
                 </div>
               </div>
-
-              <div className="advanced-fields">
-                <div className="field-group">
-                  <label>Handoff Time</label>
-                  <div className="input-with-unit">
-                    <input
-                      type="number"
-                      value={intent.handoff_minutes}
-                      onChange={(e) => updateIntent(index, 'handoff_minutes', parseFloat(e.target.value) || 0)}
-                      min="0"
-                      step="0.1"
-                    />
-                    <span className="unit">min</span>
-                  </div>
-                </div>
-
-                <div className="field-group">
-                  <label>Revenue/Abandon <span className="optional">(optional)</span></label>
-                  <div className="input-with-unit">
-                    <input
-                      type="number"
-                      value={intent.revenue_per_abandon || ''}
-                      onChange={(e) => updateIntent(index, 'revenue_per_abandon', e.target.value ? parseFloat(e.target.value) : undefined)}
-                      min="0"
-                      step="1"
-                      placeholder="0"
-                    />
-                    <span className="unit">£</span>
-                  </div>
+              
+              <div className="col-handoff">
+                <div className="input-with-unit">
+                  <input
+                    type="number"
+                    value={intent.handoff_minutes}
+                    onChange={(e) => updateIntent(index, 'handoff_minutes', parseFloat(e.target.value) || 0)}
+                    min="0"
+                    step="0.1"
+                    className="table-input"
+                  />
+                  <span className="unit">min</span>
                 </div>
               </div>
+              
+              <div className="col-revenue">
+                <div className="input-with-unit">
+                  <input
+                    type="number"
+                    value={intent.revenue_per_abandon || ''}
+                    onChange={(e) => updateIntent(index, 'revenue_per_abandon', e.target.value ? parseFloat(e.target.value) : undefined)}
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                    className="table-input"
+                  />
+                  <span className="unit">£</span>
+                </div>
+              </div>
+              
+              <div className="col-actions">
+                {inputs.intents.length > 1 && (
+                  <button
+                    onClick={() => removeIntent(index)}
+                    className="remove-btn"
+                    title="Remove this call type"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <button onClick={addIntent} className="add-intent-button">
-        + Add Another Call Type
+        + Add Call Type
       </button>
     </div>
   );
