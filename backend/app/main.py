@@ -47,22 +47,22 @@ async def get_templates():
     return {
         "verticals": [v.value for v in VerticalTemplate],
         "descriptions": {
-            "utilities": "Like PG&E: 8M calls, 41% containment, 22% CSAT boost during outages",
-            "restaurants": "Like Côte Brasserie: 76% booking conversion, £250k after-hours revenue",
-            "financial_services": "Like Quicken: 21% containment growth, non-digital customer base",
-            "healthcare": "Like Howard Brown: 30% containment, 72% AHT reduction, crisis scaling",
-            "travel": "Like Hopper: Complex queries, 15% containment for travel scenarios",
-            "retail": "E-commerce operations: Order status, returns, product information",
-            "contact_center": "Like Atos: 30% call reduction, 24/7 BPO operations, cost efficiency"
+            "utilities": "PG&E: 41% containment, 22% CSAT boost, handles 4M+ calls during outages",
+            "restaurants": "Côte Brasserie: 76% booking conversion, £250k after-hours revenue, 24/7 availability",
+            "financial_services": "Quicken: 21% containment growth, 0 customer complaints, agent efficiency boost",
+            "healthcare": "Howard Brown: 30% containment, 72% AHT reduction, crisis scaling capability",
+            "travel": "Hopper: 15% containment, 24/7 support, complex travel queries resolved",
+            "retail": "Big Table Group: £140k monthly revenue, 3,800+ reservations, 100% call answer rate",
+            "contact_center": "Atos: 30% call reduction, 187% ROI on labor savings, agent well-being improvement"
         },
         "case_studies": {
-            "utilities": "Pacific Gas & Electric serves 5.2M households with PolyAI handling 4M+ calls yearly",
-            "restaurants": "Côte Brasserie achieves 3,000 monthly reservations with 76% conversion rate",
-            "financial_services": "Quicken resolves 2,500 daily calls with zero customer complaints since launch",
-            "healthcare": "Howard Brown Health scales from 15k to 60k calls during health crises seamlessly",
-            "travel": "Hopper provides 24/7 support across 100+ countries with immediate resolution",
-            "retail": "Enhanced template based on industry best practices and PolyAI expertise",
-            "contact_center": "Atos reduces agent calls by 30% while maintaining 96% CSAT scores"
+            "utilities": "PG&E serves 5.2M households with PolyAI handling 4M+ calls yearly. 22% CSAT increase during outages, 25% customer effort reduction.",
+            "restaurants": "Côte Brasserie achieves 3,000 monthly reservations with 76% conversion rate. £250k generated from after-hours bookings.",
+            "financial_services": "Quicken resolves 2,500 daily calls with zero customer complaints since launch. 21% containment growth in first year.",
+            "healthcare": "Howard Brown scales from 15k to 60k calls during health crises seamlessly. 72% AHT reduction for routine requests.",
+            "travel": "Hopper provides 24/7 support across 100+ countries with immediate resolution. 15% containment for complex travel scenarios.",
+            "retail": "Big Table Group books 3,800+ reservations monthly worth £140k+ revenue. 100% call answer rate across 130 locations.",
+            "contact_center": "Atos reduces agent calls by 30% while maintaining 96% CSAT scores. 187% ROI on labor cost savings alone."
         }
     }
 

@@ -985,48 +985,7 @@
 }
 
 /* Charts Styling */
-.charts-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-6);
-  margin-top: var(--space-6);
-}
-
-.results-panel.compact .charts-grid {
-  display: none;
-}
-
-.chart-container {
-  background: white;
-  border: 1px solid var(--color-stroke);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-}
-
-.chart-container:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-brand-light);
-}
-
-.chart-container h4 {
-  font-size: 1.125rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  margin: 0 0 var(--space-4) 0;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.chart-container h4::before {
-  content: '';
-  width: 3px;
-  height: 1.125rem;
-  background: linear-gradient(135deg, var(--color-brand) 0%, #6366F1 100%);
-  border-radius: 2px;
-}
+/* Charts removed - replaced with tables */
 
 /* Value Split */
 .value-split {
@@ -1449,5 +1408,175 @@
   
   .chart-container h4 {
     font-size: 1rem;
+  }
+}
+
+/* Tables Grid */
+.tables-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.results-panel.compact .tables-grid {
+  display: none;
+}
+
+/* Table Container */
+.table-container {
+  background: white;
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.table-container:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-brand-light);
+}
+
+.table-container h4 {
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-4) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.table-container h4::before {
+  content: '';
+  width: 3px;
+  height: 1.125rem;
+  background: linear-gradient(135deg, var(--color-brand) 0%, #6366F1 100%);
+  border-radius: 2px;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-stroke);
+}
+
+/* Data Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.data-table th {
+  background: #F8FAFC;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-stroke);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid #E2E8F0;
+  color: var(--color-text);
+}
+
+.data-table tr:hover {
+  background: #F8FAFC;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Color-coded columns */
+.baseline-col {
+  color: #6B7280 !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.ai-col {
+  color: #4F46E5 !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.savings-col {
+  color: #10B981 !important;
+  font-weight: var(--font-weight-semibold);
+}
+
+.minutes-col {
+  color: #059669 !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.percentage-col {
+  color: #7C3AED !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.impact-col {
+  color: #F59E0B !important;
+  font-weight: var(--font-weight-semibold);
+}
+
+.rank-col {
+  color: #DC2626 !important;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Special cells */
+.year-cell {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  background: #F1F5F9;
+}
+
+.category-cell {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.driver-cell {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+
+
+/* Responsive tables */
+@media (max-width: 768px) {
+  .tables-grid {
+    gap: var(--space-4);
+  }
+  
+  .table-container {
+    padding: var(--space-4);
+  }
+  
+  .table-container h4 {
+    font-size: 1rem;
+  }
+  
+  .data-table {
+    font-size: 0.75rem;
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  .table-legend {
+    gap: var(--space-2);
+  }
+  
+  .legend-item {
+    font-size: 0.6875rem;
   }
 }

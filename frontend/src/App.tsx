@@ -82,9 +82,9 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="container">
-          <h1>Voice AI ROI Calculator</h1>
+          <h1>Voice AI Business Case Builder</h1>
           <p className="disclaimer">
-            Build a data-driven business case for Voice AI. Use proven scenarios or customize your own assumptions.
+            Build a compelling business case for Voice AI. See how PolyAI drives revenue protection, operational efficiency, and customer experience improvements across industries.
           </p>
         </div>
       </header>
@@ -94,7 +94,7 @@ function App() {
           <div className="input-step">
             <div className="step-header">
               <div className="step-number">1</div>
-              <h3 className="step-title">Choose Your Starting Point</h3>
+              <h3 className="step-title">Select Your Industry</h3>
             </div>
             <TemplatePicker onTemplateLoad={handleTemplateLoad} />
           </div>
