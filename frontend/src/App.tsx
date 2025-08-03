@@ -5,8 +5,6 @@ import TemplatePicker from './components/TemplatePicker';
 import AssumptionEditor from './components/AssumptionEditor';
 import IntentGrid from './components/IntentGrid';
 import ResultsPanel from './components/ResultsPanel';
-import ExportButtons from './components/ExportButtons';
-import AuditTrail from './components/AuditTrail';
 import './App.css';
 
 const defaultInputs: DealInputs = {
@@ -80,11 +78,6 @@ function App() {
     setInputs(templateInputs);
   };
 
-  const isValidConfiguration = () => {
-    const totalVolumeShare = inputs.intents.reduce((sum, intent) => sum + intent.volume_share, 0);
-    return Math.abs(totalVolumeShare - 1.0) <= 0.01 && inputs.intents.length > 0;
-  };
-
   return (
     <div className="app">
       <header className="app-header">
@@ -136,16 +129,6 @@ function App() {
             detailedView={detailedView}
             onToggleView={() => setDetailedView(!detailedView)}
           />
-          
-          {results && detailedView && (
-            <>
-              <ExportButtons 
-                inputs={inputs} 
-                disabled={!isValidConfiguration()}
-              />
-              <AuditTrail inputs={inputs} />
-            </>
-          )}
         </div>
       </div>
     </div>

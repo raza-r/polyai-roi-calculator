@@ -987,27 +987,45 @@
 /* Charts Styling */
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: var(--space-5);
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
   margin-top: var(--space-6);
 }
 
 .results-panel.compact .charts-grid {
-  display: none; /* Hide charts in compact view */
+  display: none;
 }
 
 .chart-container {
-  background: var(--color-bg-subtle);
+  background: white;
   border: 1px solid var(--color-stroke);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.chart-container:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-brand-light);
 }
 
 .chart-container h4 {
   font-size: 1.125rem;
-  font-weight: var(--font-weight-heading);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text);
   margin: 0 0 var(--space-4) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.chart-container h4::before {
+  content: '';
+  width: 3px;
+  height: 1.125rem;
+  background: linear-gradient(135deg, var(--color-brand) 0%, #6366F1 100%);
+  border-radius: 2px;
 }
 
 /* Value Split */
@@ -1375,5 +1393,61 @@
   .toggle-button {
     padding: var(--space-2) var(--space-4);
     font-size: 0.875rem;
+  }
+}
+
+/* Hide unused components */
+.value-split,
+.scenario-analysis,
+.scenario-bars,
+.scenario-bar,
+.scenario-header,
+.scenario-icon,
+.scenario-label,
+.scenario-value,
+.export-buttons,
+.audit-trail {
+  display: none !important;
+}
+
+/* Improve detailed view layout */
+.app-content.detailed-view {
+  grid-template-columns: 1fr 600px; /* Slightly narrower for better chart visibility */
+}
+
+@media (max-width: 1200px) {
+  .app-content.detailed-view {
+    grid-template-columns: 1fr 550px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .app-content,
+  .app-content.detailed-view {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    height: auto;
+    overflow: visible;
+  }
+  
+  .input-section,
+  .results-section {
+    overflow: visible;
+    height: auto;
+  }
+}
+
+/* Chart responsive improvements */
+@media (max-width: 768px) {
+  .charts-grid {
+    gap: var(--space-4);
+  }
+  
+  .chart-container {
+    padding: var(--space-4);
+  }
+  
+  .chart-container h4 {
+    font-size: 1rem;
   }
 }
