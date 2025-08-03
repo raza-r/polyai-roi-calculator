@@ -64,7 +64,10 @@ class Results(BaseModel):
 
 
 class VerticalTemplate(str, Enum):
+    UTILITIES = "utilities"
+    RESTAURANTS = "restaurants"
+    FINANCIAL_SERVICES = "financial_services"
+    HEALTHCARE = "healthcare"
+    TRAVEL = "travel"
     RETAIL = "retail"
-    FINANCIAL_SERVICES = "fs"
-    TELCO = "telco"
-    HOSPITALITY = "hospitality"
+    CONTACT_CENTER = "contact_center"
