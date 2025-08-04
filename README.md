@@ -2,6 +2,12 @@
 
 A sophisticated financial modeling application that calculates return on investment for Voice AI implementations across various industry verticals. This tool demonstrates advanced software engineering practices through a full-stack TypeScript/Python architecture with comprehensive business logic modeling.
 
+## 🚀 Live Demo
+
+- **Frontend**: https://polyai-roi-calculator.vercel.app
+- **Backend API**: https://polyai-roi-calculator-backend-production.up.railway.app
+- **API Docs**: https://polyai-roi-calculator-backend-production.up.railway.app/docs
+
 ## Overview
 
 The PolyAI ROI Calculator provides data-driven financial analysis for Voice AI deployments, featuring industry-specific templates, sophisticated DCF modeling, and comprehensive export capabilities. Built as a demonstration of technical competence in modern web development, API design, and financial modeling.
@@ -48,28 +54,52 @@ polyai-roi-calculator/
     └── package.json        # Node.js dependencies
 ```
 
-## Deployment Options
+## 🌐 Production Deployment
 
-### Cloud Platforms
+This application is currently deployed with a modern cloud architecture:
 
-#### Railway
-1. Connect GitHub repository
-2. Backend deploys automatically using `railway.json` configuration
-3. Frontend deploys as static site from Vite build
+### Current Production Setup
+- **Frontend**: Deployed on **Vercel** with automatic builds from `main` branch
+- **Backend**: Deployed on **Railway** using Nixpacks (native Python deployment)
+- **Architecture**: Fully decoupled frontend/backend with CORS-enabled API
 
-#### Render
-1. Backend auto-deploys using `render.yaml` configuration
-2. Frontend deploys as static site from `dist/` directory
+### Deployment Configuration
 
-#### Docker Deployment
+#### Railway Backend (Current)
+The backend uses Railway's native Python deployment with `railway.json`:
+```json
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT",
+    "healthcheckPath": "/health"
+  }
+}
+```
+
+#### Vercel Frontend (Current)
+The frontend deploys from the `frontend/` directory with environment variables:
+```json
+{
+  "env": {
+    "VITE_API_BASE_URL": "https://polyai-roi-calculator-backend-production.up.railway.app"
+  }
+}
+```
+
+### Alternative Deployment Options
+
+#### Docker Deployment (Backup Method)
 ```bash
-# Backend
-cd backend && docker build -t polyai-roi-backend .
+# Backend (if needed)
+docker build -t polyai-roi-backend .
 docker run -p 8000:8000 polyai-roi-backend
 
 # Frontend  
 cd frontend && npm run build
-# Serve dist/ folder with any static host
+# Deploy dist/ folder to any static host
 ```
 
 ## Local Development
@@ -200,25 +230,27 @@ Returns top 5 drivers by NPV impact.
 2. Styling in `frontend/src/App.css`
 3. API integration in `frontend/src/api.ts`
 
-## Deployment
+## 🔧 Deployment Instructions
 
-### Backend (Render/Railway/Fly.io)
-```bash
-# Dockerfile example
-FROM python:3.11-slim
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY app/ app/
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
+### Quick Deploy (Recommended)
 
-### Frontend (Vercel/Netlify)
-```bash
-npm run build
-# Deploy dist/ directory
-```
+#### Deploy Backend to Railway
+1. Fork this repository
+2. Connect to Railway and select your fork
+3. Railway will automatically detect the `railway.json` and deploy the backend
+4. Copy your Railway backend URL
 
-Update `frontend/src/api.ts` with production backend URL.
+#### Deploy Frontend to Vercel  
+1. Connect your repository to Vercel
+2. Set Root Directory to `frontend`
+3. Set Framework Preset to `Vite`
+4. Add environment variable: `VITE_API_BASE_URL` with your Railway backend URL
+5. Deploy
+
+### Manual Environment Configuration
+Update the backend URL in these files if needed:
+- `frontend/src/api.ts` (production fallback URL)
+- `vercel.json` (environment variable)
 
 ## Security & Compliance
 
