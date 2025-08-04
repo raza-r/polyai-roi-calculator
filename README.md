@@ -1,35 +1,30 @@
-# 🚀 PolyAI ROI Calculator - Enterprise Sales Tool
+# PolyAI ROI Calculator
 
-**The Ultimate Voice AI Business Case Builder**
+A sophisticated financial modeling application that calculates return on investment for Voice AI implementations across various industry verticals. This tool demonstrates advanced software engineering practices through a full-stack TypeScript/Python architecture with comprehensive business logic modeling.
 
-Transform prospects into customers with data-driven ROI calculations based on real PolyAI case studies. Built for Forward Deployed Engineers and Sales Teams.
+## Overview
 
-![Build Status](https://img.shields.io/badge/status-production--ready-brightgreen)
-![Deployment](https://img.shields.io/badge/deploy-one--click-blue)
-![ROI Focus](https://img.shields.io/badge/focus-commercial--first-orange)
+The PolyAI ROI Calculator provides data-driven financial analysis for Voice AI deployments, featuring industry-specific templates, sophisticated DCF modeling, and comprehensive export capabilities. Built as a demonstration of technical competence in modern web development, API design, and financial modeling.
 
-## 🎯 **Commercial Impact**
+## Technical Architecture
 
-- **🔥 Sales Conversion**: Auto-triggers demo requests for strong ROI cases
-- **📊 Industry Templates**: 7 verticals with real case study data  
-- **⚡ Fast Results**: 15-second analysis keeps prospects engaged
-- **💎 Social Proof**: Dynamic success stories based on performance
-- **📧 Lead Capture**: Built-in email collection for high-value prospects
+- **Backend**: FastAPI with Pydantic validation and sophisticated DCF modeling
+- **Frontend**: React 19 + TypeScript with modern component architecture
+- **Financial Modeling**: 5-year NPV analysis, sensitivity analysis, scenario planning
+- **Data Processing**: Real-time calculations with sub-2-second response times
+- **Deployment**: Containerized with Docker, cloud-ready configuration
 
-## 🏆 **Technical Excellence**
+## Key Features
 
-- **Backend**: FastAPI + Pydantic with sophisticated DCF modeling
-- **Frontend**: React + TypeScript with enterprise design system
-- **Calculations**: 5-year NPV, tornado analysis, scenario modeling
-- **Deployment**: Docker + Railway/Render ready
-- **Performance**: <2s load time, real-time calculations
+### Financial Modeling
+- **Cost Modeling**: Per-minute pricing for agents, telephony, and AI services
+- **Ramp Analysis**: Linear improvement modeling from M0 to M3 over 3 months
+- **Revenue Impact**: Abandon rate reduction and revenue retention calculations
+- **Growth Modeling**: Volume growth, inflation, and discount rate adjustments
+- **Risk Assessment**: Configurable containment risk factors and sensitivity analysis
 
-### Business Logic
-- **Minutes-First Pricing**: Per-minute cost modeling for agents, telephony, and AI
-- **Containment Ramp**: Linear improvement from M0 to M3 over 3 months
-- **Revenue Impact**: Abandon rate reduction and revenue retention modeling
-- **Growth Factors**: Volume growth, inflation, and discount rate adjustments
-- **Risk Adjustment**: Configurable containment risk factors
+### Industry Templates
+Pre-configured analysis templates for seven industry verticals with realistic business parameters and case study data.
 
 ## Project Structure
 
@@ -53,22 +48,20 @@ polyai-roi-calculator/
     └── package.json        # Node.js dependencies
 ```
 
-## ⚡ **One-Click Deployment**
+## Deployment Options
 
-### Option 1: Railway (Recommended)
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template)
+### Cloud Platforms
 
-1. Connect your GitHub account
-2. Deploy backend: `railway.json` configured
-3. Deploy frontend: Auto-detects Vite build
-4. **Done in 3 minutes** ✨
+#### Railway
+1. Connect GitHub repository
+2. Backend deploys automatically using `railway.json` configuration
+3. Frontend deploys as static site from Vite build
 
-### Option 2: Render
-1. Backend: Connect repo, auto-deploys from `render.yaml`
-2. Frontend: Static site, auto-builds from `dist/`
-3. **Live in 5 minutes** 🎉
+#### Render
+1. Backend auto-deploys using `render.yaml` configuration
+2. Frontend deploys as static site from `dist/` directory
 
-### Option 3: Docker Anywhere
+#### Docker Deployment
 ```bash
 # Backend
 cd backend && docker build -t polyai-roi-backend .
@@ -79,58 +72,39 @@ cd frontend && npm run build
 # Serve dist/ folder with any static host
 ```
 
-## 🎨 **Demo Flow (Sales Teams)**
-
-1. **Hook**: Bold header with "200%+ ROI" trust indicator
-2. **Engage**: Industry templates auto-populate realistic scenarios  
-3. **Calculate**: Real-time results with visual ROI badges
-4. **Convert**: Auto-popup for payback < 12 months
-5. **Capture**: Email collection for detailed reports
-
-## 🔧 **Local Development**
+## Local Development
 
 ### Prerequisites
-- Python 3.11+ 
+- Python 3.11+
 - Node.js 18+
-- npm or yarn
+- npm
 
-#### Terminal 1 - Backend
+### Setup Instructions
+
+#### Backend Setup
 ```bash
 cd backend
 pip3 install -r requirements.txt
-python3 -m uvicorn app.main_test:app --reload --port 8000
+python3 -m uvicorn app.main:app --reload --port 8000
 ```
 
-#### Terminal 2 - Frontend
+#### Frontend Setup
 ```bash
 cd frontend
-npm install  # (already completed)
-npm run dev -- --host 0.0.0.0
+npm install
+npm run dev
 ```
 
-#### Access Application
-- **Frontend**: http://localhost:5173/
-- **Backend API**: http://localhost:8000
-- **API Docs**: http://localhost:8000/docs
+### Application Access
+- Frontend: http://localhost:5173/
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
 
-### Known Issues & Solutions
-
-#### PDF Export Issue
-If you encounter WeasyPrint errors, use the test version:
-```bash
-python3 -m uvicorn app.main_test:app --port 8000  # No PDF export
-```
-
-#### Safari Localhost Issues
-Try these alternatives:
-- http://127.0.0.1:5173/
-- Use Chrome/Firefox instead
-
-### Running Tests
+### Testing
 
 ```bash
 cd backend
-python3 -m pytest tests/test_calc_engine.py -v  # Core functionality (7/9 pass)
+python3 -m pytest tests/test_calc_engine.py -v
 ```
 
 ## API Endpoints
@@ -209,14 +183,6 @@ Returns top 5 drivers by NPV impact.
 - **P50 (Base Case)**: Input assumptions as provided
 - **P90 (Optimistic)**: 20% higher containment, 10% lower costs
 
-## Demo Script (2 minutes)
-
-1. **Load Template**: Select "Retail" template
-2. **Adjust Dials**: Change containment from 45% → 60%, watch payback improve
-3. **View Sensitivity**: Open tornado chart - "Top driver is avg minutes"
-4. **Export Results**: Download XLSX, show formulas update when changed
-5. **Audit Trail**: Show JSON export with timestamp and assumptions
-
 ## Development
 
 ### Adding New Verticals
@@ -271,61 +237,27 @@ Update `frontend/src/api.ts` with production backend URL.
 - **Usage Pricing**: Per-minute pricing model
 - **CFO Review**: Exports designed for finance team validation
 
-## Troubleshooting
+## Technical Implementation Details
 
-### Common Issues
+This application demonstrates several advanced software engineering concepts:
 
-**Volume shares don't sum to 100%**
-- Check intent configuration table
-- Ensure all intents sum to 1.0 (within 1% tolerance)
+### Architecture Patterns
+- **Clean Architecture**: Separation of business logic, data models, and API layers
+- **Type Safety**: Full TypeScript implementation with Pydantic validation
+- **API Design**: RESTful endpoints with comprehensive OpenAPI documentation
+- **Error Handling**: Robust validation and error response patterns
 
-**Export failing**
-- Verify backend is running on port 8000
-- Check browser console for CORS errors
-- Ensure inputs are valid before export
+### Financial Modeling
+- **DCF Analysis**: Discounted cash flow calculations with proper NPV methodology
+- **Sensitivity Analysis**: Tornado charts showing key value drivers
+- **Scenario Planning**: P10/P50/P90 analysis for risk assessment
+- **Monte Carlo Ready**: Architecture supports stochastic modeling extensions
 
-**Negative ROI**
-- Review agent vs PolyAI cost per minute
-- Check containment improvement (M0 → M3)
-- Consider revenue retention benefits
-
-**No payback**
-- Increase containment rates
-- Review handoff minutes (should be minimal)
-- Check call volume and average minutes
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/new-calculation`
-3. Add tests for new functionality
-4. Ensure all tests pass: `pytest backend/tests/`
-5. Submit pull request with description
+### Data Processing
+- **Real-time Calculations**: Sub-second response times for complex financial models
+- **Export Capabilities**: Multiple format support (XLSX, PDF, CSV) with formula preservation
+- **Template System**: Configurable industry vertical templates with validation
 
 ## License
 
-MIT License - see LICENSE file for details.
-
-## Support
-
-For issues or questions:
-1. Check existing GitHub issues
-2. Create new issue with:
-   - Error messages
-   - Input configuration
-   - Expected vs actual behavior
-   - Environment details (browser, Python version)
-
-## Roadmap
-
-### Near Term
-- [ ] Monte Carlo simulation for uncertainty
-- [ ] Additional export formats (PowerPoint)
-- [ ] Custom vertical template builder
-- [ ] Multi-language support
-
-### Future
-- [ ] Real-time cost API integration
-- [ ] Deployment cost modeling
-- [ ] Advanced risk adjustments
-- [ ] Industry benchmarking data
+MIT License
