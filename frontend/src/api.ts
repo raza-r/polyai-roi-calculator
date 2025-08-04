@@ -4,7 +4,7 @@ import type { DealInputs, Results, VerticalTemplate } from './types';
 // Smart API base URL detection for seamless deployment
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 
                  (import.meta.env.PROD 
-                   ? `${window.location.protocol}//${window.location.hostname}:8000`  // Production: same host, port 8000
+                   ? 'https://polyai-roi-calculator-backend-production.up.railway.app'  // Production: Railway backend
                    : 'http://localhost:8000');  // Development: explicit localhost
 
 const api = axios.create({
