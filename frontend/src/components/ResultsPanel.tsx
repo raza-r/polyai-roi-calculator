@@ -87,11 +87,11 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({
           <p><strong>🎯 Elite Performance Territory!</strong> Your projected results put you in the top 10% of PolyAI implementations.</p>
           <div className="success-examples">
             <div className="success-item">
-              <strong>PG&E (Utilities)</strong>: Serving 5.2M customers, achieved 22% CSAT increase during outages with 41% containment rate. 
+              <strong>PG&E (Utilities)</strong>Serving 5.2M customers, achieved 22% CSAT increase during outages with 41% containment rate. 
               <span className="result-highlight">Similar scale, similar success.</span>
             </div>
             <div className="success-item">
-              <strong>Atos (Enterprise BPO)</strong>: 187% ROI through 30% call reduction across 24/7 operations.
+              <strong>Atos (Enterprise BPO)</strong>187% ROI through 30% call reduction across 24/7 operations.
               <span className="result-highlight">Your {formatPercent(results.roi_5y * 100)} ROI is on track.</span>
             </div>
           </div>
@@ -139,6 +139,14 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({
 
   return (
     <div className={`results-panel ${detailedView ? 'detailed' : 'compact'}`}>
+      {detailedView && (
+        <div className="view-toggle" style={{ marginTop: 0, marginBottom: 'var(--space-4)', paddingTop: 0, borderTop: 'none' }}>
+          <button className="view-toggle-btn" onClick={onToggleView}>
+            ← Collapse
+          </button>
+        </div>
+      )}
+      
       <div className="results-header">
         <h2>{detailedView ? 'Voice AI Impact Analysis' : 'ROI Summary'}</h2>
         <p className="results-subtitle">
@@ -208,39 +216,45 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({
         <div className="operational-insights">
           <h4>🎯 Key Operational Benefits</h4>
           <div className="insights-grid">
-            <div className="insight-card">
-              <div className="insight-icon">👥</div>
-              <div className="insight-content">
-                <h5>Agent Productivity</h5>
-                <div className="insight-metrics">
-                  <div className="metric-row">
-                    <span>Hours saved per agent/month:</span>
-                    <span className="metric-value">{Math.round((results.yearly[0].automated_minutes / 60) / 12).toLocaleString()}</span>
-                  </div>
-                  <div className="metric-row">
-                    <span>Focus on complex work:</span>
-                    <span className="metric-value">{formatPercent((results.yearly[0].human_minutes / results.yearly[0].baseline_minutes) * 100)}</span>
+            {Math.round((results.yearly[0].automated_minutes / 60) / 12) > 0 && (
+              <div className="insight-card">
+                <div className="insight-icon">👥</div>
+                <div className="insight-content">
+                  <h5>Agent Productivity</h5>
+                  <div className="insight-metrics">
+                    <div className="metric-row">
+                      <span>Hours saved per agent/month:</span>
+                      <span className="metric-value">{Math.round((results.yearly[0].automated_minutes / 60) / 12).toLocaleString()}</span>
+                    </div>
+                    <div className="metric-row">
+                      <span>Focus on complex work:</span>
+                      <span className="metric-value">{formatPercent((results.yearly[0].human_minutes / results.yearly[0].baseline_minutes) * 100)}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
             
-            <div className="insight-card">
-              <div className="insight-icon">🕒</div>
-              <div className="insight-content">
-                <h5>24/7 Availability</h5>
-                <div className="insight-metrics">
-                  <div className="metric-row">
-                    <span>After-hours coverage:</span>
-                    <span className="metric-value">{inputs.business_hours_only ? 'No' : '24/7'}</span>
-                  </div>
-                  <div className="metric-row">
-                    <span>Revenue protection:</span>
-                    <span className="metric-value">{formatCurrency(results.yearly[0].revenue_retained)}</span>
+            {(results.yearly[0].revenue_retained > 0 || !inputs.business_hours_only) && (
+              <div className="insight-card">
+                <div className="insight-icon">🕒</div>
+                <div className="insight-content">
+                  <h5>24/7 Availability</h5>
+                  <div className="insight-metrics">
+                    <div className="metric-row">
+                      <span>After-hours coverage:</span>
+                      <span className="metric-value">{inputs.business_hours_only ? 'No' : '24/7'}</span>
+                    </div>
+                    {results.yearly[0].revenue_retained > 0 && (
+                      <div className="metric-row">
+                        <span>Revenue protection:</span>
+                        <span className="metric-value">{formatCurrency(results.yearly[0].revenue_retained)}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
@@ -255,11 +269,13 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({
         </div>
       )}
 
-      <div className="view-toggle">
-        <button className="view-toggle-btn" onClick={onToggleView}>
-          {detailedView ? '← Compact View' : 'Explore Details →'}
-        </button>
-      </div>
+      {!detailedView && (
+        <div className="view-toggle">
+          <button className="view-toggle-btn" onClick={onToggleView}>
+            Explore Details →
+          </button>
+        </div>
+      )}
 
       {/* Detailed Content - Tables instead of charts */}
       <div className="detailed-content">
@@ -337,17 +353,17 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({
               <table className="data-table">
                 <thead>
                   <tr>
+                    <th className="rank-col">Priority</th>
                     <th>Business Factor</th>
                     <th className="impact-col">NPV Impact</th>
-                    <th className="rank-col">Priority</th>
                   </tr>
                 </thead>
                 <tbody>
                   {results.tornado.slice(0, 5).map(([driver, impact], index) => (
                     <tr key={index}>
+                      <td className="rank-col">#{index + 1}</td>
                       <td className="driver-cell">{driver.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</td>
                       <td className="impact-col">{formatCurrency(Math.abs(impact))}</td>
-                      <td className="rank-col">#{index + 1}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -21,16 +21,15 @@ const AssumptionEditor: React.FC<AssumptionEditorProps> = ({ inputs, onChange })
         <div className="param-grid">
           <div className="param-field">
             <label>Annual Call Volume</label>
-            <div className="input-with-unit">
-              <input
-                type="number"
-                value={inputs.annual_calls}
-                onChange={(e) => updateField('annual_calls', parseInt(e.target.value) || 0)}
-                min="1000"
-                step="1000"
-              />
-              <span className="unit">calls</span>
-            </div>
+            <input
+              type="number"
+              value={inputs.annual_calls}
+              onChange={(e) => updateField('annual_calls', parseInt(e.target.value) || 0)}
+              min="1000"
+              step="1000"
+              placeholder="calls"
+              className="form-input"
+            />
             <div className="field-help">Total customer calls per year</div>
           </div>
         </div>
@@ -41,32 +40,30 @@ const AssumptionEditor: React.FC<AssumptionEditorProps> = ({ inputs, onChange })
         <h4>Cost Structure</h4>
         <div className="param-grid">
           <div className="param-field">
-            <label>Agent Cost per Minute</label>
-            <div className="input-with-unit">
-              <input
-                type="number"
-                value={inputs.agent_cost_per_min}
-                onChange={(e) => updateField('agent_cost_per_min', parseFloat(e.target.value) || 0)}
-                min="0.1"
-                step="0.1"
-              />
-              <span className="unit">£</span>
-            </div>
+            <label>Agent Cost per Minute (£)</label>
+            <input
+              type="number"
+              value={inputs.agent_cost_per_min}
+              onChange={(e) => updateField('agent_cost_per_min', parseFloat(e.target.value) || 0)}
+              min="0.1"
+              step="0.1"
+              placeholder="£"
+              className="form-input"
+            />
             <div className="field-help">Current cost per minute of agent time</div>
           </div>
           
           <div className="param-field">
-            <label>Voice AI Cost per Minute</label>
-            <div className="input-with-unit">
-              <input
-                type="number"
-                value={inputs.polyai_cost_per_min}
-                onChange={(e) => updateField('polyai_cost_per_min', parseFloat(e.target.value) || 0)}
-                min="0.01"
-                step="0.01"
-              />
-              <span className="unit">£</span>
-            </div>
+            <label>Voice AI Cost per Minute (£)</label>
+            <input
+              type="number"
+              value={inputs.polyai_cost_per_min}
+              onChange={(e) => updateField('polyai_cost_per_min', parseFloat(e.target.value) || 0)}
+              min="0.01"
+              step="0.01"
+              placeholder="£"
+              className="form-input"
+            />
             <div className="field-help">PolyAI cost per minute (typically 10-20% of agent cost)</div>
           </div>
         </div>
@@ -90,19 +87,18 @@ const AssumptionEditor: React.FC<AssumptionEditorProps> = ({ inputs, onChange })
           </div>
           
           <div className="param-field">
-            <label>After Hours Volume</label>
-            <div className="input-with-unit">
-              <input
-                type="number"
-                value={(inputs.night_fraction * 100).toFixed(0)}
-                onChange={(e) => updateField('night_fraction', (parseFloat(e.target.value) || 0) / 100)}
-                min="0"
-                max="100"
-                step="1"
-                disabled={inputs.business_hours_only}
-              />
-              <span className="unit">%</span>
-            </div>
+            <label>After Hours Volume (%)</label>
+            <input
+              type="number"
+              value={(inputs.night_fraction * 100).toFixed(0)}
+              onChange={(e) => updateField('night_fraction', (parseFloat(e.target.value) || 0) / 100)}
+              min="0"
+              max="100"
+              step="1"
+              disabled={inputs.business_hours_only}
+              placeholder="%"
+              className="form-input"
+            />
             <div className="field-help">Percentage of calls outside business hours</div>
           </div>
         </div>
@@ -125,66 +121,62 @@ const AssumptionEditor: React.FC<AssumptionEditorProps> = ({ inputs, onChange })
         <div className="param-section advanced">
           <div className="param-grid">
             <div className="param-field">
-              <label>Call Abandonment (Current)</label>
-              <div className="input-with-unit">
-                <input
-                  type="number"
-                  value={(inputs.baseline_abandon_rate * 100).toFixed(1)}
-                  onChange={(e) => updateField('baseline_abandon_rate', (parseFloat(e.target.value) || 0) / 100)}
-                  min="0"
-                  max="100"
-                  step="0.1"
-                />
-                <span className="unit">%</span>
-              </div>
+              <label>Call Abandonment % (Current)</label>
+              <input
+                type="number"
+                value={(inputs.baseline_abandon_rate * 100).toFixed(1)}
+                onChange={(e) => updateField('baseline_abandon_rate', (parseFloat(e.target.value) || 0) / 100)}
+                min="0"
+                max="100"
+                step="0.1"
+                placeholder="%"
+                className="form-input"
+              />
               <div className="field-help">Current percentage of abandoned calls</div>
             </div>
             
             <div className="param-field">
-              <label>Call Abandonment (With AI)</label>
-              <div className="input-with-unit">
-                <input
-                  type="number"
-                  value={(inputs.ai_abandon_rate * 100).toFixed(1)}
-                  onChange={(e) => updateField('ai_abandon_rate', (parseFloat(e.target.value) || 0) / 100)}
-                  min="0"
-                  max="100"
-                  step="0.1"
-                />
-                <span className="unit">%</span>
-              </div>
+              <label>Call Abandonment % (with PolyAI)</label>
+              <input
+                type="number"
+                value={(inputs.ai_abandon_rate * 100).toFixed(1)}
+                onChange={(e) => updateField('ai_abandon_rate', (parseFloat(e.target.value) || 0) / 100)}
+                min="0"
+                max="100"
+                step="0.1"
+                placeholder="%"
+                className="form-input"
+              />
               <div className="field-help">Expected abandonment rate with Voice AI</div>
             </div>
             
             <div className="param-field">
-              <label>Volume Growth Rate</label>
-              <div className="input-with-unit">
-                <input
-                  type="number"
-                  value={(inputs.volume_growth * 100).toFixed(1)}
-                  onChange={(e) => updateField('volume_growth', (parseFloat(e.target.value) || 0) / 100)}
-                  min="0"
-                  max="50"
-                  step="0.1"
-                />
-                <span className="unit">%</span>
-              </div>
+              <label>Volume Growth Rate %</label>
+              <input
+                type="number"
+                value={(inputs.volume_growth * 100).toFixed(1)}
+                onChange={(e) => updateField('volume_growth', (parseFloat(e.target.value) || 0) / 100)}
+                min="0"
+                max="50"
+                step="0.1"
+                placeholder="%"
+                className="form-input"
+              />
               <div className="field-help">Annual growth in call volume</div>
             </div>
             
             <div className="param-field">
-              <label>Inflation Rate</label>
-              <div className="input-with-unit">
-                <input
-                  type="number"
-                  value={(inputs.inflation * 100).toFixed(1)}
-                  onChange={(e) => updateField('inflation', (parseFloat(e.target.value) || 0) / 100)}
-                  min="0"
-                  max="20"
-                  step="0.1"
-                />
-                <span className="unit">%</span>
-              </div>
+              <label>Inflation Rate %</label>
+              <input
+                type="number"
+                value={(inputs.inflation * 100).toFixed(1)}
+                onChange={(e) => updateField('inflation', (parseFloat(e.target.value) || 0) / 100)}
+                min="0"
+                max="20"
+                step="0.1"
+                placeholder="%"
+                className="form-input"
+              />
               <div className="field-help">Annual cost inflation rate</div>
             </div>
           </div>

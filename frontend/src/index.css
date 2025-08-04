@@ -10,16 +10,20 @@
   --font-accent: 'SF Mono', ui-monospace, SFMono-Regular, 'Consolas', monospace;
   
   /* Font Sizes */
-  --font-size-h1: 4rem;      /* 64px */
-  --font-size-h2: 2.5rem;    /* 40px */
-  --font-size-h3: 1.75rem;   /* 28px */
-  --font-size-body: 1.0625rem; /* 17px */
-  --font-size-label: 0.8125rem; /* 13px */
+  --font-size-h1: 4rem;         /* 64px - Main titles */
+  --font-size-h2: 2.5rem;       /* 40px - Section headers */
+  --font-size-h3: 1.75rem;      /* 28px - Subsection headers */
+  --font-size-h4: 1.125rem;     /* 18px - Card/component headers */
+  --font-size-body: 1.0625rem;  /* 17px - Primary body text */
+  --font-size-small: 0.875rem;  /* 14px - Secondary text, inputs */
+  --font-size-label: 0.8125rem; /* 13px - Labels, captions */
+  --font-size-xs: 0.75rem;      /* 12px - Smallest text, helpers */
   
   /* Font Weights */
   --font-weight-heading: 700;
-  --font-weight-body: 400;
+  --font-weight-semibold: 600;
   --font-weight-medium: 500;
+  --font-weight-body: 400;
   --font-weight-mono: 500;
   
   /* Condensed Spacing Scale (4px base) */
