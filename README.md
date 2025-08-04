@@ -15,10 +15,10 @@ The PolyAI ROI Calculator provides data-driven financial analysis for Voice AI d
 ## Technical Architecture
 
 - **Backend**: FastAPI with Pydantic validation and sophisticated DCF modeling
-- **Frontend**: React 19 + TypeScript with modern component architecture
+- **Frontend**: React 18 + TypeScript + Vite with modern component architecture
 - **Financial Modeling**: 5-year NPV analysis, sensitivity analysis, scenario planning
 - **Data Processing**: Real-time calculations with sub-2-second response times
-- **Deployment**: Containerized with Docker, cloud-ready configuration
+- **Deployment**: Railway (Nixpacks) + Vercel with cloud-native configuration
 
 ## Key Features
 
@@ -27,7 +27,7 @@ The PolyAI ROI Calculator provides data-driven financial analysis for Voice AI d
 - **Ramp Analysis**: Linear improvement modeling from M0 to M3 over 3 months
 - **Revenue Impact**: Abandon rate reduction and revenue retention calculations
 - **Growth Modeling**: Volume growth, inflation, and discount rate adjustments
-- **Risk Assessment**: Configurable containment risk factors and sensitivity analysis
+- **Risk Assessment**: Configurable containment risk adjustment and comprehensive sensitivity analysis
 
 ### Industry Templates
 Pre-configured analysis templates for seven industry verticals with realistic business parameters and case study data.
@@ -145,9 +145,9 @@ python3 -m pytest tests/test_calc_engine.py -v
 - `GET /api/templates/{vertical}` - Get specific template data
 
 ### Export Endpoints
-- `POST /api/export/xlsx` - Export Excel workbook with formulas
-- `POST /api/export/pdf` - Export 3-page PDF report
-- `POST /api/export/csv` - Export CSV data
+- `POST /api/export/csv` - Export CSV data (active)
+- `POST /api/export/xlsx` - Export Excel workbook (disabled)
+- `POST /api/export/pdf` - Export PDF report (disabled)
 
 ### Utility Endpoints
 - `GET /health` - Health check
@@ -182,7 +182,8 @@ Pre-configured templates for common industries:
 **Intent Minutes**: 
 - Baseline: `calls * volume_share * (avg_minutes + acw_minutes)`
 - Automated: `calls * volume_share * avg_minutes * containment_rate`
-- Human: `calls * volume_share * avg_minutes * (1 - containment) + handoff_minutes + acw`
+- Handoff: `calls * volume_share * handoff_minutes * (1 - containment)`
+- Human: `calls * volume_share * avg_minutes * (1 - containment) + handoff_minutes + calls * volume_share * acw_minutes`
 
 **Costs**:
 - Baseline: `minutes * (agent_cost + telco_cost)`
@@ -190,23 +191,24 @@ Pre-configured templates for common industries:
 
 **Value Components**:
 - Operational Savings: `baseline_cost - ai_cost`
-- Revenue Retained: `abandon_reduction * revenue_per_abandon`
+- Revenue Retained: `(baseline_abandon_rate - ai_abandon_rate) * calls * volume_share * revenue_per_abandon`
 - Total Value: `ops_savings + revenue_retained`
+- NPV: `total_value / (1 + discount_rate)^year`
 
 ### Ramp Modeling
 - Linear containment improvement from M0 to M3 over first 3 months
-- Monthly payback calculation with ramp factor: `ramp_factor = month / 3`
+- Monthly payback calculation with ramp factor: `ramp_factor = (month + 1) / 3`
 - Steady-state containment from month 4 onwards
 
 ### Sensitivity Analysis
-Tests ±20% changes in:
-- Containment rates (per intent)
-- Agent costs
-- PolyAI costs
-- Volume growth
-- Discount rate
+Tests percentage changes in key variables:
+- Containment rates: ±20% per intent
+- Agent costs: ±20%
+- PolyAI costs: ±20%
+- Volume growth: ±10%
+- Discount rate: ±10%
 
-Returns top 5 drivers by NPV impact.
+Returns top 5 drivers by NPV impact, calculated as `abs(high_npv - low_npv) / 2`.
 
 ### Scenario Analysis
 - **P10 (Pessimistic)**: 20% lower containment, 10% higher costs
