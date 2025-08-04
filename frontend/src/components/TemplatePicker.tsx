@@ -19,7 +19,13 @@ const TemplatePicker: React.FC<TemplatePickerProps> = ({ onTemplateLoad }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-    getTemplates().then(setTemplates);
+    getTemplates()
+      .then(setTemplates)
+      .catch(error => {
+        console.error('Failed to load templates:', error);
+        // Set empty templates to prevent infinite loading
+        setTemplates({ verticals: [], descriptions: {}, case_studies: {} });
+      });
   }, []);
 
   const handleTemplateSelect = async (vertical: VerticalTemplate) => {
