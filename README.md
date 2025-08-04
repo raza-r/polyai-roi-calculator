@@ -15,7 +15,7 @@ The PolyAI ROI Calculator provides data-driven financial analysis for Voice AI d
 ## Technical Architecture
 
 - **Backend**: FastAPI with Pydantic validation and sophisticated DCF modeling
-- **Frontend**: React 18 + TypeScript + Vite with modern component architecture
+- **Frontend**: React 19 + TypeScript + Vite with Recharts visualization and modern component architecture
 - **Financial Modeling**: 5-year NPV analysis, sensitivity analysis, scenario planning
 - **Data Processing**: Real-time calculations with sub-2-second response times
 - **Deployment**: Railway (Nixpacks) + Vercel with cloud-native configuration
@@ -30,7 +30,7 @@ The PolyAI ROI Calculator provides data-driven financial analysis for Voice AI d
 - **Risk Assessment**: Configurable containment risk adjustment and comprehensive sensitivity analysis
 
 ### Industry Templates
-Pre-configured analysis templates for seven industry verticals with realistic business parameters and case study data.
+Pre-configured analysis templates for seven industry verticals based on real PolyAI case studies with realistic business parameters and proven ROI data.
 
 ## Project Structure
 
@@ -42,16 +42,22 @@ polyai-roi-calculator/
 │   │   ├── models.py       # Pydantic data models
 │   │   ├── calc_engine.py  # Core ROI calculation logic
 │   │   ├── templates.py    # Vertical industry templates
-│   │   └── exports.py      # XLSX, PDF, CSV export functionality
+│   │   └── exports.py      # CSV export functionality
 │   ├── tests/              # Unit tests
 │   └── requirements.txt    # Python dependencies
 └── frontend/               # React + Vite application
     ├── src/
     │   ├── components/     # React components
+    │   │   ├── AssumptionEditor.tsx    # Financial parameter inputs
+    │   │   ├── AuditTrail.tsx          # Calculation audit log
+    │   │   ├── ExportButtons.tsx       # CSV export functionality
+    │   │   ├── IntentGrid.tsx          # Intent configuration matrix
+    │   │   ├── ResultsPanel.tsx        # ROI visualization and metrics
+    │   │   └── TemplatePicker.tsx      # Industry vertical selection
     │   ├── types.ts        # TypeScript interfaces
-    │   ├── api.ts          # API client
+    │   ├── api.ts          # API client with axios
     │   └── App.tsx         # Main application
-    └── package.json        # Node.js dependencies
+    └── package.json        # Node.js dependencies (React 19, Recharts, Vite)
 ```
 
 ## 🌐 Production Deployment
@@ -80,9 +86,26 @@ The backend uses Railway's native Python deployment with `railway.json`:
 ```
 
 #### Vercel Frontend (Current)
-The frontend deploys from the `frontend/` directory with environment variables:
+The frontend deploys from the root directory with build configuration:
 ```json
 {
+  "name": "polyai-roi-calculator-frontend",
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercelcdn/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
+    }
+  ],
   "env": {
     "VITE_API_BASE_URL": "https://polyai-roi-calculator-backend-production.up.railway.app"
   }
@@ -107,7 +130,7 @@ cd frontend && npm run build
 ### Prerequisites
 - Python 3.11+
 - Node.js 18+
-- npm
+- npm or yarn
 
 ### Setup Instructions
 
@@ -122,7 +145,7 @@ python3 -m uvicorn app.main:app --reload --port 8000
 ```bash
 cd frontend
 npm install
-npm run dev
+npm run dev    # Starts Vite dev server on port 5173
 ```
 
 ### Application Access
@@ -145,9 +168,7 @@ python3 -m pytest tests/test_calc_engine.py -v
 - `GET /api/templates/{vertical}` - Get specific template data
 
 ### Export Endpoints
-- `POST /api/export/csv` - Export CSV data (active)
-- `POST /api/export/xlsx` - Export Excel workbook (disabled)
-- `POST /api/export/pdf` - Export PDF report (disabled)
+- `POST /api/export/csv` - Export CSV data with full analysis breakdown
 
 ### Utility Endpoints
 - `GET /health` - Health check
@@ -155,23 +176,42 @@ python3 -m pytest tests/test_calc_engine.py -v
 
 ## Vertical Templates
 
-Pre-configured templates for common industries:
+Pre-configured templates based on real PolyAI case studies:
 
-### Retail
-- Order Status, Returns & Exchanges, Store Hours, Delivery Issues, Loyalty Program
-- Default: 100k annual calls, mixed containment rates
+### Utilities
+- Based on PG&E case study: 16M calls/year, 41% containment, 22% CSAT increase during outages
+- Outage Reporting & Updates, Billing Inquiries, Service Start/Stop, General FAQs, Safety/Gas Leaks
+- Default: 8M annual calls, £1.05/min agent cost, 24/7 operations
+
+### Restaurants  
+- Based on Côte Brasserie & Melting Pot: 76% conversion rate, £250k after-hours revenue
+- New Reservations, Reservation Changes, Cancellations, Menu & Location Info, Special Events & Groups
+- Default: 350k annual calls, £0.75/min agent cost, 35% after-hours calls
 
 ### Financial Services
-- Card Activation, Balance Inquiry, Dispute Resolution, Lost/Stolen Cards, KYC
-- Higher agent costs, lower initial containment for complex financial processes
+- Based on Quicken & Retail Bank: 21-30% containment growth, non-digital customer base
+- Account Balance & Statements, Password Reset & Login Help, Card Services, Payments & Transfers, Disputes & Complex Issues
+- Default: 1.2M annual calls, £1.10/min agent cost, business hours only
 
-### Telco
-- Plan Changes, Billing, Tech Support, Outage Info, Device Upgrade
-- Higher call volume, revenue impact from plan changes
+### Healthcare
+- Based on Howard Brown Health: 30% containment, 72% AHT reduction, crisis scaling capability
+- Appointment Scheduling, Test Results & Records, Prescription Refills, General Health Information, Crisis & Emergency Info
+- Default: 180k annual calls, £1.25/min agent cost, 24/7 operations
 
-### Hospitality
-- Reservations, Modifications, Cancellations, FAQ, Loyalty
-- 24/7 operation, high revenue per abandon for bookings
+### Travel
+- Based on Hopper: 15% containment for complex travel queries, global 24/7 support
+- Booking Questions & FAQs, Flight Changes & Cancellations, Travel Alerts & Updates, Refund Requests, Special Assistance
+- Default: 600k annual calls, £0.95/min agent cost, 45% international time zone calls
+
+### Retail
+- Enhanced template with e-commerce focus and customer retention emphasis
+- Order Status & Tracking, Returns & Exchanges, Product Information, Delivery & Shipping, Account & Loyalty
+- Default: 450k annual calls, £0.85/min agent cost, business hours operation
+
+### Contact Center
+- Based on Atos case study: 30% call reduction, 24/7/365 operations, 187% ROI on labor savings
+- General FAQs, Account Authentication, Service Requests, Technical Support L1, Escalations & Complex Cases
+- Default: 2.5M annual calls, £0.90/min agent cost, 40% night shift coverage
 
 ## Calculation Methodology
 
@@ -289,8 +329,8 @@ This application demonstrates several advanced software engineering concepts:
 
 ### Data Processing
 - **Real-time Calculations**: Sub-second response times for complex financial models
-- **Export Capabilities**: Multiple format support (XLSX, PDF, CSV) with formula preservation
-- **Template System**: Configurable industry vertical templates with validation
+- **Export Capabilities**: CSV export with comprehensive financial analysis breakdown
+- **Template System**: Configurable industry vertical templates based on real case studies
 
 ## License
 
