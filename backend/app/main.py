@@ -1,23 +1,47 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
-from .models import DealInputs, Results, VerticalTemplate
-from .calc_engine import ROICalculator
-from .templates import get_template
+from .config import get_settings
+
+# Import legacy models (backward compatibility)
+try:
+    from .models import DealInputs, Results, VerticalTemplate
+    from .calc_engine import ROICalculator
+    from .templates import get_template
+except ImportError:
+    # Legacy imports not available yet
+    pass
+
+# Import new API routers
+from .api.auth import router as auth_router
+from .api.calculators import router as calculator_router
+from .api.templates import router as template_router
+
 from functools import lru_cache
 import csv
 import io
 
-app = FastAPI(title="PolyAI ROI Calculator API", version="1.0.0")
+settings = get_settings()
 
-# CORS middleware - Allow all origins for demo deployment
+app = FastAPI(
+    title="CalcForge API",
+    description="Multi-tenant SaaS platform for creating custom ROI calculators",
+    version="2.0.0"
+)
+
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for easy deployment
-    allow_credentials=False,  # Set to False when using allow_origins=["*"]
-    allow_methods=["GET", "POST"],
+    allow_origins=settings.CORS_ORIGINS if settings.ENVIRONMENT == "production" else ["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(auth_router)
+app.include_router(calculator_router)
+app.include_router(template_router)
 
 
 @app.get("/")

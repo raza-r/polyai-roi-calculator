@@ -1,7 +1,12 @@
 /* PolyAI Design System - Base Styles */
 
 /* Import fonts (using system fallbacks for now - can be replaced with Matter SQ and Basis Grotesque Mono) */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Design Tokens */
 :root {

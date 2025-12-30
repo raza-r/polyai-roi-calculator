@@ -1,210 +1,43 @@
-import { useState, useEffect } from 'react';
-import type { DealInputs, Results } from './types';
-import { calculateROI } from './api';
-import TemplatePicker from './components/TemplatePicker';
-import AssumptionEditor from './components/AssumptionEditor';
-import IntentGrid from './components/IntentGrid';
-import ResultsPanel from './components/ResultsPanel';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuthStore } from './store/auth';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
+import Calculator from './pages/Calculator';
 
-const defaultInputs: DealInputs = {
-  annual_calls: 100000,
-  intents: [
-    {
-      name: "General Inquiry",
-      volume_share: 1.0,
-      avg_minutes: 3.0,
-      containment_m0: 0.5,
-      containment_m3: 0.8,
-      handoff_minutes: 1.0,
-      revenue_per_abandon: undefined
-    }
-  ],
-  agent_cost_per_min: 0.8,
-  telco_cost_per_min: 0.05,
-  polyai_cost_per_min: 0.12,
-  acw_minutes: 1.0,
-  baseline_abandon_rate: 0.15,
-  ai_abandon_rate: 0.08,
-  business_hours_only: true,
-  night_fraction: 0.3,
-  inflation: 0.03,
-  volume_growth: 0.05,
-  discount_rate: 0.10,
-  risk_adjustment: 0.1
-};
+// Protected route wrapper
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+}
 
 function App() {
-  const [inputs, setInputs] = useState<DealInputs>(defaultInputs);
-  const [results, setResults] = useState<Results | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [detailedView, setDetailedView] = useState(false);
-  const [showLeadModal, setShowLeadModal] = useState(false);
-  const [showScheduleDemo, setShowScheduleDemo] = useState(false);
-
-  // Throttled calculation
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      calculateResults();
-    }, 250);
-
-    return () => clearTimeout(timer);
-  }, [inputs]); // calculateResults is stable, no need to include in deps
-
-  const calculateResults = async () => {
-    // Validate inputs
-    const totalVolumeShare = inputs.intents.reduce((sum, intent) => sum + intent.volume_share, 0);
-    if (Math.abs(totalVolumeShare - 1.0) > 0.01) {
-      setError('Intent volume shares must sum to 100%');
-      setResults(null);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const result = await calculateROI(inputs);
-      setResults(result);
-      
-      // Commercial hooks - show CTAs for strong ROI cases (once per session)
-      if (result.payback_months && result.payback_months <= 12 && result.roi_5y > 2.0) {
-        const hasShownDemo = sessionStorage.getItem('polyai-demo-shown');
-        if (!hasShownDemo) {
-          setTimeout(() => {
-            setShowScheduleDemo(true);
-            sessionStorage.setItem('polyai-demo-shown', 'true');
-          }, 2000);
-        }
-      }
-    } catch (err) {
-      setError('Failed to calculate ROI. Please check your inputs.');
-      setResults(null);
-      console.error('Calculation error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleTemplateLoad = (templateInputs: DealInputs) => {
-    setInputs(templateInputs);
-  };
-
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="container">
-          <h1>PolyAI ROI Calculator</h1>
-          <div className="header-subtitle">
-            <p className="value-prop">
-              Build a comprehensive business case for Voice AI implementation with industry-specific analysis and benchmarking.
-            </p>
-            <div className="trust-indicators">
-              <span className="trust-badge">Enterprise Analysis</span>
-              <span className="trust-badge">Industry Benchmarks</span>
-              <span className="trust-badge">Financial Modeling</span>
-            </div>
-          </div>
-        </div>
-      </header>
+    <Router>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
-      <div className={`app-content ${detailedView ? 'detailed-view' : ''}`}>
-        <div className="input-section">
-          <div className="input-step">
-            <div className="step-header">
-              <div className="step-number">1</div>
-              <h3 className="step-title">Choose Your Industry</h3>
-            </div>
-            <TemplatePicker onTemplateLoad={handleTemplateLoad} />
-          </div>
+        {/* Public calculator view */}
+        <Route path="/c/:orgSlug/:calcSlug" element={<Calculator />} />
 
-          <div className="input-step">
-            <div className="step-header">
-              <div className="step-number">2</div>
-              <h3 className="step-title">Business Parameters</h3>
-            </div>
-            <AssumptionEditor inputs={inputs} onChange={setInputs} />
-          </div>
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-          <div className="input-step">
-            <div className="step-header">
-              <div className="step-number">3</div>
-              <h3 className="step-title">Call Types & Volumes</h3>
-            </div>
-            <IntentGrid inputs={inputs} onChange={setInputs} />
-          </div>
-          
-          {error && (
-            <div className="error-message">
-              <strong>Configuration Issue:</strong> {error}
-            </div>
-          )}
-        </div>
-
-        <div className="results-section">
-          <ResultsPanel 
-            results={results} 
-            inputs={inputs}
-            loading={loading} 
-            detailedView={detailedView}
-            onToggleView={() => setDetailedView(!detailedView)}
-            onScheduleDemo={() => setShowScheduleDemo(true)}
-            onDownloadReport={() => setShowLeadModal(true)}
-          />
-        </div>
-      </div>
-
-      {/* Commercial Modals */}
-      {showScheduleDemo && (
-        <div className="modal-overlay" onClick={() => setShowScheduleDemo(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Strong Business Case Identified</h3>
-              <button className="modal-close" onClick={() => setShowScheduleDemo(false)}>×</button>
-            </div>
-            <div className="modal-body">
-              <p>Your analysis shows <strong>payback in {results?.payback_months?.toFixed(1)} months</strong> with <strong>{results?.roi_5y ? (results.roi_5y * 100).toFixed(0) : 0}% ROI</strong>.</p>
-              <p>Schedule a consultation to review implementation approach and validation.</p>
-              <div className="modal-actions">
-                <a href="https://calendly.com/polyai-demo" target="_blank" rel="noopener noreferrer" 
-                   className="btn-primary modal-cta">
-                  Schedule Consultation
-                </a>
-                <button className="btn-secondary" onClick={() => setShowScheduleDemo(false)}>
-                  Maybe Later
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showLeadModal && (
-        <div className="modal-overlay" onClick={() => setShowLeadModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Detailed Analysis Report</h3>
-              <button className="modal-close" onClick={() => setShowLeadModal(false)}>×</button>
-            </div>
-            <div className="modal-body">
-              <p>Enter your email to receive a comprehensive ROI analysis with industry benchmarks.</p>
-              <form onSubmit={(e) => { e.preventDefault(); alert('Thanks! Check your email for the report.'); setShowLeadModal(false); }}>
-                <input type="email" placeholder="your.email@company.com" className="form-input" required />
-                <div className="modal-actions">
-                  <button type="submit" className="btn-primary modal-cta">
-                    Send Report
-                  </button>
-                  <button type="button" className="btn-secondary" onClick={() => setShowLeadModal(false)}>
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+        {/* Catch all - redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
